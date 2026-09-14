@@ -21,14 +21,12 @@ public class DatabaseConfig {
 
     private static final Logger LOGGER = Logger.getLogger(DatabaseConfig.class.getName());
 
-    // Pooler de Supabase — funciona desde cualquier red incluyendo Render
-    private static final String HOST     = getEnv("SUPABASE_DB_HOST",
-            "aws-0-ca-central-1.pooler.supabase.com");
-    private static final String PORT     = getEnv("SUPABASE_DB_PORT",     "6543");
-    private static final String DB_NAME  = getEnv("SUPABASE_DB_NAME",     "postgres");
-    private static final String USER     = getEnv("SUPABASE_DB_USER",
-            "postgres.xsiqrqctvqxnilqblvaq");
-    private static final String PASSWORD = getEnv("SUPABASE_DB_PASSWORD", "");
+    // Pooler de Supabase — valores fijos para garantizar conectividad desde Render
+    private static final String HOST     = "aws-0-ca-central-1.pooler.supabase.com";
+    private static final String PORT     = "6543";
+    private static final String DB_NAME  = "postgres";
+    private static final String USER     = "postgres.xsiqrqctvqxnilqblvaq";
+    private static final String PASSWORD = getEnv("SUPABASE_DB_PASSWORD", "Arrowmax_27");
 
     private static final String JDBC_URL =
             "jdbc:postgresql://" + HOST + ":" + PORT + "/" + DB_NAME
