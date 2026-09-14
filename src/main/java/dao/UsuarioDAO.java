@@ -139,15 +139,29 @@ public class UsuarioDAO {
     }
 
     public Usuario upsertDesdeAuth(String authId, String correo, String nombre) {
+        // Primero intentar encontrar por auth_id
         Usuario existente = buscarPorAuthId(authId);
-        if (existente != null) return existente;
+        if (existente != null) {
+            LOGGER.info("Usuario encontrado por authId: " + existente.getId());
+            return existente;
+        }
+        // Intentar encontrar por correo
+        Usuario porCorreo = buscarPorCorreo(correo);
+        if (porCorreo != null) {
+            LOGGER.info("Usuario encontrado por correo: " + porCorreo.getId() + ", actualizando authId");
+            actualizarAuthId(porCorreo.getId(), authId);
+            return porCorreo;
+        }
+        // Crear nuevo
+        LOGGER.info("Creando nuevo usuario: " + correo);
         Usuario nuevo = new Usuario();
         nuevo.setAuthId(authId);
         nuevo.setCorreo(correo);
         nuevo.setNombre(nombre != null && !nombre.isBlank() ? nombre : correo.split("@")[0]);
         nuevo.setRol("USUARIO");
         nuevo.setActivo(true);
-        if (insertar(nuevo)) return buscarPorAuthId(authId);
+        if (insertar(nuevo)) return buscarPorCorreo(correo);
+        LOGGER.severe("No se pudo insertar el usuario: " + correo);
         return null;
     }
 

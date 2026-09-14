@@ -73,12 +73,16 @@ public class LoginServlet extends HttpServlet {
                     nombre = meta.get("name").getAsString();
             }
 
+            LOGGER.info("Login intento - authId=" + authId + " email=" + email);
+
             Usuario usuario = usuarioDAO.upsertDesdeAuth(authId, email, nombre);
+            LOGGER.info("upsertDesdeAuth resultado: " + (usuario != null ? usuario.getId() : "NULL"));
 
             // Fallback: si upsert falla, buscar por correo
             if (usuario == null) {
                 LOGGER.warning("upsertDesdeAuth falló para authId=" + authId + ", buscando por correo...");
                 usuario = usuarioDAO.buscarPorCorreo(email);
+                LOGGER.info("buscarPorCorreo resultado: " + (usuario != null ? usuario.getId() : "NULL"));
                 // Si existe por correo, actualizar su auth_id
                 if (usuario != null) {
                     usuarioDAO.actualizarAuthId(usuario.getId(), authId);
