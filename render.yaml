@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: arquitectura-software-upla
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: SUPABASE_URL
+        value: https://xsiqrqctvqxnilqblvaq.supabase.co
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: SUPABASE_BUCKET
+        value: materiales
+      - key: SUPABASE_DB_HOST
+        value: db.xsiqrqctvqxnilqblvaq.supabase.co
+      - key: SUPABASE_DB_PORT
+        value: "5432"
+      - key: SUPABASE_DB_NAME
+        value: postgres
+      - key: SUPABASE_DB_USER
+        value: postgres
+      - key: SUPABASE_DB_PASSWORD
+        sync: false
+    healthCheckPath: /

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 115" fill="none">
+  <!-- Hexágono azul UPLA -->
+  <polygon points="50,2 98,27 98,77 50,102 2,77 2,27" fill="#1B7EC2" rx="8"/>
+  <!-- Llamas/símbolo UPLA (simplificado) -->
+  <path d="M30 85 C28 70 32 55 42 45 C38 58 40 68 45 75 C43 65 46 55 52 48 C50 60 52 70 56 78 C54 68 58 58 64 52 C61 65 60 75 62 82 L55 85 Z" fill="white"/>
+  <!-- Montaña al centro -->
+  <path d="M44 55 L50 42 L56 55 Z" fill="#1B7EC2" opacity="0.6"/>
+</svg>

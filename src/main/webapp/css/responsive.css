@@ -1,0 +1,59 @@
+/* RESPONSIVE.CSS */
+@media(max-width:1024px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .info-grid{grid-template-columns:1fr}
+  .objectives-grid{grid-template-columns:1fr 1fr}
+  .resultados-grid{grid-template-columns:1fr 1fr}
+  .semanas-preview-grid{grid-template-columns:1fr 1fr}
+  .detalle-grid{grid-template-columns:1fr}
+  .search-grid{grid-template-columns:1fr 1fr 1fr}
+  .perfil-layout{grid-template-columns:280px 1fr}
+  .stats-grid-admin{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  :root{--sidebar-w:260px}
+  .sidebar{transform:translateX(-100%);box-shadow:0 0 40px rgba(0,0,0,.6)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-close{display:flex}
+  .sidebar-overlay.open{display:block}
+  .main-content{margin-left:0}
+  .sidebar-toggle{display:flex}
+  .topbar{padding:0 1rem}
+  .user-greeting{display:none}
+  .topbar-title h1{font-size:1rem}
+  .page-content{padding:1rem}
+  .course-hero{padding:2rem 1.5rem}
+  .course-title{font-size:1.6rem}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .objectives-grid,.resultados-grid{grid-template-columns:1fr}
+  .semanas-preview-grid{grid-template-columns:1fr}
+  .semana-detail-banner{flex-direction:column;gap:1rem}
+  .semana-detail-num{font-size:2rem}
+  .detalle-grid{grid-template-columns:1fr}
+  .search-grid{grid-template-columns:1fr}
+  .perfil-layout{grid-template-columns:1fr}
+  .perfil-card{position:static}
+  .admin-tabs{flex-wrap:wrap;width:100%}
+  .stats-grid-admin{grid-template-columns:repeat(2,1fr)}
+  .modal{margin:1rem;max-width:calc(100% - 2rem)}
+  .evaluacion-item{grid-template-columns:130px 1fr 45px}
+  .tipo-stat-item{grid-template-columns:90px 1fr 40px}
+  .modal-footer{flex-direction:column}
+  .modal-footer button,.modal-footer a{width:100%;justify-content:center}
+}
+@media(max-width:480px){
+  .course-hero{padding:1.5rem 1rem;min-height:auto}
+  .course-title{font-size:1.35rem}
+  .stats-grid{grid-template-columns:1fr 1fr;gap:.65rem}
+  .stat-card{padding:1rem;gap:.65rem}
+  .stat-value{font-size:1.4rem}
+  .semana-card-footer{flex-direction:column;gap:.5rem}
+  .btn-ver-semana{width:100%}
+  .stats-grid-admin{grid-template-columns:1fr 1fr;gap:.65rem}
+  .perfil-stats{grid-template-columns:1fr 1fr}
+  .page-content{padding:.75rem}
+  .topbar{padding:0 .75rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}

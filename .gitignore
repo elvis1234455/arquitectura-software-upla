@@ -1,0 +1,51 @@
+# ── Maven ──────────────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# ── IDE ────────────────────────────────────────────────────────
+.idea/
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+*.eclipse
+.vscode/
+
+# ── Variables de entorno y credenciales ───────────────────────
+.env
+.env.*
+*.properties.local
+application-local.properties
+secrets.properties
+
+# ── Tomcat ─────────────────────────────────────────────────────
+work/
+logs/
+
+# ── Sistema operativo ─────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Materiales reales (no subir al repo) ──────────────────────
+src/main/webapp/images/*.pdf
+src/main/webapp/images/*.doc
+src/main/webapp/images/*.docx
+src/main/webapp/images/*.ppt
+src/main/webapp/images/*.pptx
+src/main/webapp/images/*.xls
+src/main/webapp/images/*.xlsx
+uploads/
+
+# ── Logs ───────────────────────────────────────────────────────
+*.log
+*.log.*
+
+# ── Temporales ────────────────────────────────────────────────
+*.tmp
+*.bak
+*.swp
