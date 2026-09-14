@@ -44,6 +44,33 @@ public class UsuarioDAO {
         return null;
     }
 
+    public Usuario buscarPorCorreo(String correo) {
+        String sql = "SELECT * FROM usuarios WHERE correo = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, correo);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return mapear(rs);
+            }
+        } catch (SQLException e) {
+            LOGGER.log(Level.SEVERE, "Error al buscar por correo", e);
+        }
+        return null;
+    }
+
+    public boolean actualizarAuthId(int id, String authId) {
+        String sql = "UPDATE usuarios SET auth_id = ?::uuid WHERE id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, authId);
+            ps.setInt(2, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            LOGGER.log(Level.WARNING, "Error al actualizar auth_id", e);
+            return false;
+        }
+    }
+
     public Usuario buscarPorId(int id) {
         String sql = "SELECT * FROM usuarios WHERE id = ?";
         try (Connection conn = DatabaseConfig.getConnection();

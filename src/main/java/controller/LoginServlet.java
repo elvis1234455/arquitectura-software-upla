@@ -75,6 +75,18 @@ public class LoginServlet extends HttpServlet {
 
             Usuario usuario = usuarioDAO.upsertDesdeAuth(authId, email, nombre);
 
+            // Fallback: si upsert falla, buscar por correo
+            if (usuario == null) {
+                LOGGER.warning("upsertDesdeAuth falló para authId=" + authId + ", buscando por correo...");
+                usuario = usuarioDAO.buscarPorCorreo(email);
+                // Si existe por correo, actualizar su auth_id
+                if (usuario != null) {
+                    usuarioDAO.actualizarAuthId(usuario.getId(), authId);
+                    usuario.setAuthId(authId);
+                    LOGGER.info("Usuario encontrado por correo, auth_id actualizado.");
+                }
+            }
+
             if (usuario == null) {
                 req.setAttribute("error", "Error al recuperar datos del usuario. Intenta de nuevo.");
                 req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
