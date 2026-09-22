@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   POKEMON CARD THEME — Plataforma Educativa UPLA
-   Cartas de Pokémon con flip 3D interactivo
+   POKEMON CARD THEME — Sin giro, carta directa
    ═══════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;500;600;700&display=swap');
@@ -9,12 +8,10 @@
   --poke-red:    #EE1515;
   --poke-yellow: #FFDE00;
   --poke-blue:   #3B4CCA;
-  --poke-black:  #1a1a2e;
-  --poke-white:  #F8F8F8;
-  --poke-gray:   #8B9BB4;
   --poke-bg:     #0d1117;
-  --card-w:      200px;
-  --card-h:      280px;
+  --poke-gray:   #8B9BB4;
+  --card-w:      210px;
+  --card-h:      295px;
 }
 
 /* ══ LOADER ════════════════════════════════════════════════════ */
@@ -24,32 +21,26 @@
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   z-index: 9999; gap: 1.5rem;
-  transition: opacity .6s ease, visibility .6s ease;
+  transition: opacity .5s ease, visibility .5s ease;
 }
 #pokemon-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
 .loader-pokeball {
-  width: 72px; height: 72px; border-radius: 50%;
-  position: relative; animation: loaderSpin .9s linear infinite;
+  width: 70px; height: 70px; border-radius: 50%;
+  position: relative;
+  animation: loaderSpin .9s linear infinite;
   box-shadow: 0 0 30px rgba(238,21,21,.6);
 }
 .loader-pokeball::before {
-  content: '';
-  position: absolute; inset: 0; border-radius: 50%;
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
   background: linear-gradient(to bottom,
-    #EE1515 0%, #EE1515 46%,
-    #111 46%, #111 54%,
-    #fff 54%, #fff 100%);
+    #EE1515 0%, #EE1515 46%, #111 46%, #111 54%, #fff 54%, #fff 100%);
 }
 .loader-pokeball::after {
-  content: '';
-  position: absolute;
+  content: ''; position: absolute;
   width: 20px; height: 20px;
-  background: #fff; border: 4px solid #111;
-  border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
+  background: #fff; border: 4px solid #111; border-radius: 50%;
+  top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 2;
 }
 @keyframes loaderSpin { to { transform: rotate(360deg); } }
 
@@ -60,11 +51,11 @@
   animation: textPulse 1s ease-in-out infinite alternate;
 }
 @keyframes textPulse {
-  from { opacity: .6; }
-  to   { opacity: 1; text-shadow: 0 0 12px var(--poke-yellow); }
+  from { opacity: .5; }
+  to   { opacity: 1; text-shadow: 0 0 14px var(--poke-yellow); }
 }
 
-/* ══ PÁGINA POKÉMON ════════════════════════════════════════════ */
+/* ══ PÁGINA ════════════════════════════════════════════════════ */
 .pokemon-page { background: var(--poke-bg) !important; min-height: 100vh; }
 .pokemon-page .topbar {
   background: rgba(13,17,23,.97) !important;
@@ -76,336 +67,231 @@
   font-family: 'Press Start 2P', monospace;
   font-size: .9rem; color: var(--poke-yellow);
   text-shadow: 2px 2px 0 var(--poke-red);
-  margin-bottom: .5rem;
+  margin-bottom: .4rem;
 }
 .poke-section-sub {
   font-family: 'Poppins', sans-serif;
   font-size: .85rem; color: var(--poke-gray); margin-bottom: 1rem;
 }
-.pokemon-page .toast-success {
-  font-family: 'Press Start 2P', monospace; font-size: .5rem;
-  background: rgba(255,222,0,.12); border-color: var(--poke-yellow); color: var(--poke-yellow);
-}
 
-/* ══ GRID DE CARTAS ════════════════════════════════════════════ */
+/* ══ GRID ══════════════════════════════════════════════════════ */
 .pokemon-card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
-  gap: 2rem;
-  padding: 1rem 0 3rem;
+  gap: 1.75rem;
+  padding: .5rem 0 3rem;
   justify-items: center;
 }
 
-/* ══ CARTA POKÉMON — FLIP 3D ═══════════════════════════════════ */
-.pcard-scene {
+/* ══ CARTA POKÉMON — DIRECTA (sin flip) ═══════════════════════ */
+.pcard {
   width: var(--card-w);
   height: var(--card-h);
-  perspective: 1000px;
-}
-
-.pcard-wrapper {
-  width: 100%; height: 100%;
+  border-radius: 14px;
   position: relative;
-  transform-style: preserve-3d;
-  transition: transform .55s ease;
-  cursor: pointer;
-  border-radius: 12px;
-}
-
-/* Flip por clase .flipped */
-.pcard-scene.flipped .pcard-wrapper {
-  transform: rotateY(180deg);
-}
-
-/* Frente y reverso */
-.pcard-front,
-.pcard-back {
-  position: absolute; inset: 0;
-  border-radius: 12px;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   overflow: hidden;
-}
-
-/* ── FRENTE — Dorso de carta Pokémon ────────────────────────── */
-.pcard-front {
-  background:
-    radial-gradient(ellipse at 30% 30%, rgba(255,255,255,.08), transparent 60%),
-    linear-gradient(135deg, #1a0a2e 0%, #2d1060 40%, #1a0a2e 100%);
-  border: 2px solid rgba(255,222,0,.4);
-  box-shadow:
-    0 0 0 1px rgba(255,222,0,.15),
-    0 8px 32px rgba(0,0,0,.6),
-    inset 0 1px 0 rgba(255,255,255,.1);
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
   display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: .5rem;
-}
 
-/* Patrón de fondo del dorso */
-.pcard-front::before {
-  content: '';
-  position: absolute; inset: 8px;
-  border: 1.5px solid rgba(255,222,0,.25);
-  border-radius: 8px;
-}
-
-.pcard-front::after {
-  content: '';
-  position: absolute; inset: 0;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(255,222,0,.03) 10px,
-      rgba(255,222,0,.03) 11px
-    );
-}
-
-.pcard-front-logo {
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--poke-red), #ff6b6b);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 30px rgba(238,21,21,.5), 0 0 60px rgba(238,21,21,.2);
-  position: relative; z-index: 1;
-  animation: logoPulse 2s ease-in-out infinite alternate;
-}
-@keyframes logoPulse {
-  from { box-shadow: 0 0 20px rgba(238,21,21,.4); transform: scale(1); }
-  to   { box-shadow: 0 0 40px rgba(238,21,21,.7), 0 0 70px rgba(255,222,0,.2); transform: scale(1.05); }
-}
-
-.pcard-front-logo svg {
-  width: 46px; height: 46px; fill: #fff;
-}
-
-.pcard-front-label {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .48rem; color: var(--poke-yellow);
-  letter-spacing: .1em; position: relative; z-index: 1;
-  text-shadow: 0 0 10px rgba(255,222,0,.5);
-}
-
-.pcard-front-num {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .9rem; color: #fff; position: relative; z-index: 1;
-  text-shadow: 2px 2px 0 var(--poke-red);
-}
-
-.pcard-front-hint {
-  font-family: 'Poppins', sans-serif;
-  font-size: .65rem; color: rgba(255,255,255,.4);
-  position: relative; z-index: 1;
-}
-
-/* ── REVERSO — Info de la semana (carta TCG) ────────────────── */
-.pcard-back {
-  transform: rotateY(180deg);
-  background: linear-gradient(160deg, #fffde7 0%, #fff9c4 40%, #fff3e0 100%);
+  /* Carta amarilla/dorada estilo TCG */
+  background: linear-gradient(160deg, #fffde7 0%, #fff9c4 35%, #fff3e0 100%);
   border: 3px solid #c8a400;
   box-shadow:
     0 0 0 1px #e8c700,
-    inset 0 0 30px rgba(200,164,0,.1),
-    0 12px 40px rgba(0,0,0,.5);
-  display: flex; flex-direction: column;
+    0 8px 24px rgba(0,0,0,.6),
+    inset 0 1px 0 rgba(255,255,255,.7);
 }
 
-/* Borde interior dorado */
-.pcard-back::before {
+/* Borde interior */
+.pcard::before {
   content: '';
-  position: absolute; inset: 6px;
-  border: 1.5px solid rgba(200,164,0,.5);
-  border-radius: 8px;
-  pointer-events: none;
-  z-index: 0;
+  position: absolute; inset: 5px;
+  border: 1.5px solid rgba(200,164,0,.45);
+  border-radius: 10px;
+  pointer-events: none; z-index: 0;
 }
 
-/* Encabezado de la carta */
+/* Brillo holográfico en hover */
+.pcard::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255,255,255,.18) 50%,
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity .3s ease, transform .3s ease;
+  transform: translateX(-100%);
+  pointer-events: none; z-index: 5;
+}
+
+.pcard:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow:
+    0 0 0 2px var(--poke-yellow),
+    0 20px 48px rgba(0,0,0,.7),
+    0 0 30px rgba(255,222,0,.3);
+}
+.pcard:hover::after {
+  opacity: 1;
+  transform: translateX(100%);
+  transition: opacity .1s, transform .6s ease;
+}
+
+/* ── ENCABEZADO ─────────────────────────────────────────────── */
 .pcard-header {
-  background: linear-gradient(90deg, var(--poke-red), #cc0000);
-  padding: .45rem .75rem;
+  background: linear-gradient(90deg, #EE1515, #cc0000);
+  padding: .4rem .65rem;
   display: flex; align-items: center; justify-content: space-between;
-  position: relative; z-index: 1;
+  position: relative; z-index: 1; flex-shrink: 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,.3);
 }
-
 .pcard-header-name {
   font-family: 'Press Start 2P', monospace;
-  font-size: .42rem; color: #fff;
-  letter-spacing: .05em;
-  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
-  max-width: 120px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-size: .4rem; color: #fff;
+  max-width: 115px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.5);
 }
-
-.pcard-header-hp {
+.pcard-header-num {
   font-family: 'Press Start 2P', monospace;
-  font-size: .38rem; color: #ffdd00;
-  white-space: nowrap;
+  font-size: .38rem; color: #ffdd00; white-space: nowrap;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
 }
 
-/* Imagen / ilustración de la carta */
+/* ── ILUSTRACIÓN ────────────────────────────────────────────── */
 .pcard-illustration {
-  margin: .4rem .5rem;
-  height: 80px;
-  background: linear-gradient(135deg, #1a237e, #283593, #1565c0);
-  border-radius: 6px;
+  margin: .35rem .45rem .2rem;
+  height: 90px; flex-shrink: 0;
+  border-radius: 7px;
   border: 2px solid #c8a400;
+  background: linear-gradient(135deg, #0f1647 0%, #1a237e 40%, #1565c0 100%);
   display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden; z-index: 1;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,.4);
 }
-
 .pcard-illustration::before {
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 30% 40%, rgba(255,255,255,.15), transparent 50%),
-    repeating-linear-gradient(
-      -45deg, transparent, transparent 8px,
-      rgba(255,255,255,.04) 8px, rgba(255,255,255,.04) 9px
-    );
+    radial-gradient(circle at 25% 35%, rgba(255,255,255,.12), transparent 50%),
+    repeating-linear-gradient(-45deg, transparent, transparent 8px,
+      rgba(255,255,255,.03) 8px, rgba(255,255,255,.03) 9px);
 }
-
-.pcard-illus-content {
+.pcard-illus-inner {
   text-align: center; position: relative; z-index: 1;
 }
-
 .pcard-illus-num {
   font-family: 'Press Start 2P', monospace;
-  font-size: 1.6rem; color: rgba(255,255,255,.15);
+  font-size: 2rem; color: rgba(255,255,255,.18);
   display: block; line-height: 1;
 }
-
 .pcard-illus-label {
   font-family: 'Poppins', sans-serif;
-  font-size: .6rem; color: rgba(255,255,255,.5);
-  font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  font-size: .58rem; color: rgba(255,255,255,.45);
+  font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
 }
 
-/* Tipo y set */
+/* ── TIPO ───────────────────────────────────────────────────── */
 .pcard-type-bar {
-  padding: .2rem .6rem;
-  display: flex; align-items: center; gap: .4rem;
-  position: relative; z-index: 1;
+  padding: .15rem .5rem .1rem;
+  display: flex; align-items: center; gap: .35rem;
+  position: relative; z-index: 1; flex-shrink: 0;
 }
-
 .pcard-type-badge {
   font-family: 'Press Start 2P', monospace;
-  font-size: .35rem; padding: .2rem .5rem;
+  font-size: .32rem; padding: .18rem .45rem;
   background: var(--poke-blue); color: #fff;
-  border-radius: 1rem; letter-spacing: .05em;
+  border-radius: 1rem; letter-spacing: .04em;
 }
-
 .pcard-mat-count {
   font-family: 'Poppins', sans-serif;
-  font-size: .65rem; color: #666; margin-left: auto;
+  font-size: .65rem; color: #888; margin-left: auto;
 }
 
-/* Descripción */
+/* ── DESCRIPCIÓN ────────────────────────────────────────────── */
 .pcard-desc-box {
-  margin: 0 .5rem .3rem;
-  background: rgba(255,255,255,.6);
-  border: 1px solid rgba(200,164,0,.4);
-  border-radius: 4px;
-  padding: .4rem .5rem;
-  flex: 1; overflow: hidden;
-  position: relative; z-index: 1;
+  margin: 0 .45rem .25rem;
+  background: rgba(255,255,255,.55);
+  border: 1px solid rgba(200,164,0,.35);
+  border-radius: 5px;
+  padding: .35rem .45rem;
+  flex: 1; overflow: hidden; position: relative; z-index: 1;
 }
-
 .pcard-title-text {
   font-family: 'Press Start 2P', monospace;
-  font-size: .4rem; color: #1a1a2e;
-  line-height: 1.6; margin-bottom: .25rem;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: .37rem; color: #1a1a2e;
+  line-height: 1.7; margin-bottom: .2rem;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden;
 }
-
 .pcard-desc-text {
   font-family: 'Poppins', sans-serif;
-  font-size: .6rem; color: #444; line-height: 1.4;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: .6rem; color: #555; line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; overflow: hidden;
 }
 
-/* Botón entrar */
+/* ── BOTÓN ──────────────────────────────────────────────────── */
 .pcard-btn-wrap {
-  padding: .4rem .5rem .5rem;
-  position: relative; z-index: 1;
+  padding: .3rem .45rem .4rem;
+  position: relative; z-index: 1; flex-shrink: 0;
 }
-
 .pcard-enter-btn {
   display: block; width: 100%;
   font-family: 'Press Start 2P', monospace;
-  font-size: .42rem; text-align: center;
-  background: linear-gradient(135deg, var(--poke-red), #cc1111);
+  font-size: .4rem; text-align: center;
+  background: linear-gradient(135deg, #EE1515, #cc1111);
   color: #fff;
   border: 2px solid #800000;
   box-shadow: 0 3px 0 #800000, inset 0 1px 0 rgba(255,255,255,.2);
-  padding: .5rem;
-  border-radius: 4px;
-  text-decoration: none;
-  transition: .1s ease;
-  cursor: pointer;
+  padding: .5rem; border-radius: 5px;
+  text-decoration: none; transition: .12s ease; cursor: pointer;
+  letter-spacing: .04em;
 }
-
-.pcard-enter-btn:hover,
-.pcard-enter-btn:active {
+.pcard-enter-btn:hover {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 #800000;
-  color: #fff;
-  background: linear-gradient(135deg, #cc1111, var(--poke-red));
+  box-shadow: 0 1px 0 #800000; color: #fff;
 }
 
-/* Pie de la carta */
+/* ── PIE ────────────────────────────────────────────────────── */
 .pcard-footer {
-  padding: .2rem .6rem .3rem;
+  padding: .1rem .5rem .25rem;
   display: flex; align-items: center; justify-content: space-between;
-  position: relative; z-index: 1;
+  position: relative; z-index: 1; flex-shrink: 0;
 }
-
 .pcard-footer-set {
   font-family: 'Press Start 2P', monospace;
-  font-size: .3rem; color: #aaa; letter-spacing: .05em;
+  font-size: .28rem; color: #bbb;
 }
+.pcard-footer-rarity { color: #c8a400; font-size: .8rem; }
 
-.pcard-footer-rarity {
-  color: #c8a400; font-size: .8rem;
-}
-
-/* Botones admin debajo de la carta */
+/* Botones admin */
 .pcard-admin-actions {
   display: flex; gap: .4rem; justify-content: center;
-  margin-top: .5rem;
-  opacity: 0; transition: opacity .25s;
+  margin-top: .4rem;
+  opacity: 0; transition: opacity .2s;
 }
-.pcard-scene:hover .pcard-admin-actions,
-.pcard-scene.flipped .pcard-admin-actions {
-  opacity: 1;
-}
+.pcard-container:hover .pcard-admin-actions { opacity: 1; }
 
-/* ══ ADMIN modal Pokémon ═══════════════════════════════════════ */
+/* ══ MODALES ═══════════════════════════════════════════════════ */
 .pokemon-page .modal {
   background: #1a1a2e;
   border: 2px solid var(--poke-red);
   box-shadow: 0 0 40px rgba(238,21,21,.3), 4px 4px 0 #000;
 }
-.pokemon-page .modal-header {
-  background: var(--poke-red);
-  border-bottom: 2px solid #000;
-}
+.pokemon-page .modal-header { background: var(--poke-red); border-bottom: 2px solid #000; }
 .pokemon-page .modal-header h3 {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .6rem; color: #fff;
+  font-family: 'Press Start 2P', monospace; font-size: .6rem; color: #fff;
 }
 .pokemon-page .btn-primary {
   font-family: 'Press Start 2P', monospace; font-size: .48rem;
-  background: var(--poke-red); border: 2px solid #000;
-  box-shadow: 2px 2px 0 #000;
+  background: var(--poke-red); border: 2px solid #000; box-shadow: 2px 2px 0 #000;
 }
-.pokemon-page .btn-primary:hover {
-  transform: translate(1px,1px); box-shadow: 1px 1px 0 #000;
-}
+.pokemon-page .btn-primary:hover { transform: translate(1px,1px); box-shadow: 1px 1px 0 #000; }
 .pokemon-page .btn-danger {
   font-family: 'Press Start 2P', monospace; font-size: .48rem;
   border: 2px solid #000; box-shadow: 2px 2px 0 #000;
@@ -413,10 +299,12 @@
 .pokemon-page .btn-danger:hover { transform: translate(1px,1px); box-shadow: 1px 1px 0 #000; }
 .pokemon-page .form-input,
 .pokemon-page .form-textarea { background: #0d1117; border-color: #334155; }
-.pokemon-page .form-group label { font-family: 'Press Start 2P', monospace; font-size: .48rem; }
+.pokemon-page .form-group label {
+  font-family: 'Press Start 2P', monospace; font-size: .45rem;
+}
 .pokemon-page .btn-secondary { font-family: 'Poppins', sans-serif; }
 
-/* ══ EMPTY STATE ═══════════════════════════════════════════════ */
+/* Empty state */
 .poke-empty { text-align: center; padding: 4rem 2rem; }
 .poke-empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
 .poke-empty h3 {
@@ -425,13 +313,19 @@
 }
 .poke-empty p { font-family: 'Poppins', sans-serif; color: var(--poke-gray); }
 
-/* ══ RESPONSIVE ════════════════════════════════════════════════ */
+/* Toast */
+.pokemon-page .toast-success {
+  font-family: 'Press Start 2P', monospace; font-size: .48rem;
+  background: rgba(255,222,0,.12); border-color: var(--poke-yellow); color: var(--poke-yellow);
+}
+
+/* Responsive */
 @media(max-width:768px) {
-  :root { --card-w: 170px; --card-h: 245px; }
+  :root { --card-w: 175px; --card-h: 255px; }
   .pokemon-card-grid { gap: 1.25rem; }
   .poke-section-title { font-size: .65rem; }
 }
 @media(max-width:480px) {
-  :root { --card-w: 155px; --card-h: 225px; }
-  .pokemon-card-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  :root { --card-w: 158px; --card-h: 235px; }
+  .pokemon-card-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; }
 }
