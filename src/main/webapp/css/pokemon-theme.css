@@ -1,522 +1,437 @@
 /* ═══════════════════════════════════════════════════════════════
-   POKEMON THEME CSS — Plataforma Educativa UPLA
-   Diseño Pokébola 3D interactiva para sección de semanas
+   POKEMON CARD THEME — Plataforma Educativa UPLA
+   Cartas de Pokémon con flip 3D interactivo
    ═══════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Poppins:wght@400;500;600;700&display=swap');
 
-/* ── Variables Pokémon ─────────────────────────────────────────── */
 :root {
   --poke-red:    #EE1515;
-  --poke-red-d:  #B01010;
   --poke-yellow: #FFDE00;
   --poke-blue:   #3B4CCA;
-  --poke-black:  #212121;
+  --poke-black:  #1a1a2e;
   --poke-white:  #F8F8F8;
   --poke-gray:   #8B9BB4;
-  --poke-bg:     #0D1117;
-  --poke-card-w: 220px;
-  --poke-card-h: 220px;
+  --poke-bg:     #0d1117;
+  --card-w:      200px;
+  --card-h:      280px;
 }
 
-/* ══════════════════════════════════════════════════════════════
-   LOADER — Pokébola girando
-   ══════════════════════════════════════════════════════════════ */
+/* ══ LOADER ════════════════════════════════════════════════════ */
 #pokemon-loader {
   position: fixed; inset: 0;
   background: var(--poke-bg);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  gap: 2rem;
-  transition: opacity .5s ease, visibility .5s ease;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 9999; gap: 1.5rem;
+  transition: opacity .6s ease, visibility .6s ease;
 }
-
-#pokemon-loader.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
+#pokemon-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
 .loader-pokeball {
-  width: 100px; height: 100px;
-  border-radius: 50%;
-  position: relative;
-  animation: loaderSpin 1s linear infinite;
-  box-shadow: 0 0 40px rgba(238,21,21,.5), 0 0 80px rgba(238,21,21,.2);
+  width: 72px; height: 72px; border-radius: 50%;
+  position: relative; animation: loaderSpin .9s linear infinite;
+  box-shadow: 0 0 30px rgba(238,21,21,.6);
 }
-
 .loader-pokeball::before {
   content: '';
-  position: absolute; inset: 0;
-  border-radius: 50%;
-  background: linear-gradient(
-    to bottom,
-    var(--poke-red) 0%,
-    var(--poke-red) 46%,
-    var(--poke-black) 46%,
-    var(--poke-black) 54%,
-    var(--poke-white) 54%,
-    var(--poke-white) 100%
-  );
+  position: absolute; inset: 0; border-radius: 50%;
+  background: linear-gradient(to bottom,
+    #EE1515 0%, #EE1515 46%,
+    #111 46%, #111 54%,
+    #fff 54%, #fff 100%);
 }
-
 .loader-pokeball::after {
   content: '';
   position: absolute;
-  width: 28px; height: 28px;
-  background: var(--poke-white);
-  border: 5px solid var(--poke-black);
+  width: 20px; height: 20px;
+  background: #fff; border: 4px solid #111;
   border-radius: 50%;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  box-shadow: 0 0 12px rgba(255,255,255,.8);
 }
-
-@keyframes loaderSpin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
+@keyframes loaderSpin { to { transform: rotate(360deg); } }
 
 .loader-text {
   font-family: 'Press Start 2P', monospace;
-  font-size: .6rem;
-  color: var(--poke-yellow);
-  text-align: center;
-  line-height: 1.8;
-  text-shadow: 2px 2px 0 var(--poke-red), 4px 4px 0 rgba(238,21,21,.3);
-  animation: textBlink 1s ease-in-out infinite alternate;
-  letter-spacing: .05em;
-  max-width: 320px;
+  font-size: .55rem; color: var(--poke-yellow);
+  text-align: center; line-height: 2;
+  animation: textPulse 1s ease-in-out infinite alternate;
+}
+@keyframes textPulse {
+  from { opacity: .6; }
+  to   { opacity: 1; text-shadow: 0 0 12px var(--poke-yellow); }
 }
 
-@keyframes textBlink {
-  from { opacity: .7; }
-  to   { opacity: 1; text-shadow: 2px 2px 0 var(--poke-red), 0 0 20px var(--poke-yellow); }
-}
-
-.loader-dots {
-  display: inline-block;
-  animation: dots 1.5s steps(4, end) infinite;
-}
-@keyframes dots {
-  0%  { content: ''; }
-  25% { content: '.'; }
-  50% { content: '..'; }
-  75% { content: '...'; }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   PÁGINA DE SEMANAS — fondo temático
-   ══════════════════════════════════════════════════════════════ */
-.pokemon-page {
-  background: var(--poke-bg) !important;
-  min-height: 100vh;
-}
-
-.pokemon-page .page-content {
-  background: transparent;
-}
-
+/* ══ PÁGINA POKÉMON ════════════════════════════════════════════ */
+.pokemon-page { background: var(--poke-bg) !important; min-height: 100vh; }
 .pokemon-page .topbar {
-  background: rgba(13,17,23,.95) !important;
+  background: rgba(13,17,23,.97) !important;
   border-bottom: 2px solid var(--poke-red) !important;
 }
 
-/* Header de sección */
-.poke-section-header {
-  text-align: center;
-  padding: 2rem 1rem 1.5rem;
-  position: relative;
-}
-
+.poke-section-header { text-align: center; padding: 1.5rem 1rem 1rem; }
 .poke-section-title {
   font-family: 'Press Start 2P', monospace;
-  font-size: 1.1rem;
-  color: var(--poke-yellow);
-  text-shadow: 3px 3px 0 var(--poke-red), 6px 6px 0 rgba(238,21,21,.3);
-  margin-bottom: .75rem;
-  letter-spacing: .05em;
+  font-size: .9rem; color: var(--poke-yellow);
+  text-shadow: 2px 2px 0 var(--poke-red);
+  margin-bottom: .5rem;
 }
-
 .poke-section-sub {
   font-family: 'Poppins', sans-serif;
-  font-size: .9rem;
-  color: var(--poke-gray);
-  margin-bottom: 1.5rem;
+  font-size: .85rem; color: var(--poke-gray); margin-bottom: 1rem;
 }
-
-.poke-section-header .btn-primary {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .5rem;
-  background: var(--poke-red);
-  border: 2px solid #fff;
-  box-shadow: 3px 3px 0 var(--poke-black);
-  padding: .7rem 1.2rem;
-  letter-spacing: .05em;
-}
-.poke-section-header .btn-primary:hover {
-  background: var(--poke-red-d);
-  transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--poke-black);
-}
-
-/* Toast Pokemon */
 .pokemon-page .toast-success {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .55rem;
-  background: rgba(255,222,0,.15);
-  border-color: var(--poke-yellow);
-  color: var(--poke-yellow);
-}
-.pokemon-page .toast-error {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .55rem;
+  font-family: 'Press Start 2P', monospace; font-size: .5rem;
+  background: rgba(255,222,0,.12); border-color: var(--poke-yellow); color: var(--poke-yellow);
 }
 
-/* ══════════════════════════════════════════════════════════════
-   GRID DE POKÉBOLAS
-   ══════════════════════════════════════════════════════════════ */
-.pokeball-grid {
+/* ══ GRID DE CARTAS ════════════════════════════════════════════ */
+.pokemon-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(var(--poke-card-w), 1fr));
-  gap: 2.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+  gap: 2rem;
   padding: 1rem 0 3rem;
   justify-items: center;
 }
 
-/* Contenedor con perspectiva */
-.pokeball-scene {
-  width: var(--poke-card-w);
-  height: var(--poke-card-h);
-  perspective: 900px;
-  margin-bottom: 50px;
+/* ══ CARTA POKÉMON — FLIP 3D ═══════════════════════════════════ */
+.pcard-scene {
+  width: var(--card-w);
+  height: var(--card-h);
+  perspective: 1000px;
 }
 
-/* ── Contenedor de la tarjeta ─────────────────────────────────── */
-.pokeball-wrapper {
-  width: var(--poke-card-w);
-  height: var(--poke-card-h);
-  cursor: pointer;
-  position: relative;
-  margin-bottom: 50px;
-}
-
-.pokeball-inner {
+.pcard-wrapper {
   width: 100%; height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform .6s cubic-bezier(.4,0,.2,1);
-  border-radius: 50%;
-  filter: drop-shadow(0 8px 24px rgba(238,21,21,.5));
+  transition: transform .55s ease;
+  cursor: pointer;
+  border-radius: 12px;
 }
 
-/* Flip activo por clase JS */
-.pokeball-wrapper.flipped .pokeball-inner {
+/* Flip por clase .flipped */
+.pcard-scene.flipped .pcard-wrapper {
   transform: rotateY(180deg);
-  filter: drop-shadow(0 10px 28px rgba(255,222,0,.65));
 }
 
-/* ── FRENTE — Pokébola ────────────────────────────────────────── */
-.pokeball-front,
-.pokeball-back {
+/* Frente y reverso */
+.pcard-front,
+.pcard-back {
   position: absolute; inset: 0;
-  border-radius: 50%;
+  border-radius: 12px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  clip-path: circle(50% at 50% 50%);
-  -webkit-clip-path: circle(50% at 50% 50%);
-}
-
-.pokeball-front {
-  background: transparent;
-  box-shadow:
-    inset -12px -12px 30px rgba(0,0,0,.4),
-    inset 6px 6px 20px rgba(255,255,255,.15);
-  z-index: 1;
-}
-
-/* Mitad superior roja */
-.pf-top {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  background: linear-gradient(135deg, #FF2020 0%, var(--poke-red) 50%, #CC0000 100%);
-  border-radius: 50% 50% 0 0 / 50% 50% 0 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 6px;
-}
-
-/* Mitad inferior blanca */
-.pf-bottom {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 50%;
-  background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 50%, #d0d0d0 100%);
-  border-radius: 0 0 50% 50% / 0 0 50% 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 6px;
-}
-
-/* Franja central negra */
-.pf-band {
-  position: absolute;
-  top: 50%; left: 0; right: 0;
-  height: 12%;
-  background: var(--poke-black);
-  transform: translateY(-50%);
-  z-index: 2;
-}
-
-/* Botón central */
-.pf-button {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px; height: 40px;
-  background: radial-gradient(circle at 35% 35%, #ffffff, #cccccc);
-  border: 5px solid var(--poke-black);
-  border-radius: 50%;
-  z-index: 3;
-  box-shadow:
-    0 0 0 3px rgba(255,255,255,.3),
-    inset 0 2px 4px rgba(255,255,255,.8),
-    0 4px 12px rgba(0,0,0,.5);
-  animation: buttonPulse 2s ease-in-out infinite;
-}
-
-@keyframes buttonPulse {
-  0%, 100% { box-shadow: 0 0 0 3px rgba(255,255,255,.3), inset 0 2px 4px rgba(255,255,255,.8), 0 4px 12px rgba(0,0,0,.5); }
-  50%       { box-shadow: 0 0 0 6px rgba(255,255,255,.15), 0 0 20px rgba(255,255,255,.4), inset 0 2px 4px rgba(255,255,255,.8), 0 4px 12px rgba(0,0,0,.5); }
-}
-
-/* Reflejo de luz en la pokébola */
-.pf-shine {
-  position: absolute;
-  width: 35%; height: 25%;
-  background: radial-gradient(ellipse, rgba(255,255,255,.6) 0%, transparent 70%);
-  top: 8%; left: 18%;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* Texto en el frente */
-.pf-semana-num {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .55rem;
-  color: #fff;
-  text-shadow: 1px 1px 0 rgba(0,0,0,.6);
-  text-align: center;
-  letter-spacing: .05em;
-  line-height: 1.4;
-  padding: 0 1rem;
-}
-
-.pf-hint {
-  font-family: 'Poppins', sans-serif;
-  font-size: .6rem;
-  color: #555;
-  text-align: center;
-  padding: 0 .5rem;
-}
-
-/* Número de materiales en la franja */
-.pf-count {
-  position: absolute;
-  top: 50%; right: 12px;
-  transform: translateY(-50%);
-  font-family: 'Press Start 2P', monospace;
-  font-size: .45rem;
-  color: var(--poke-yellow);
-  z-index: 4;
-  background: rgba(0,0,0,.5);
-  padding: .2rem .4rem;
-  border-radius: .25rem;
-}
-
-/* ── REVERSO — Info de la semana ──────────────────────────────── */
-.pokeball-back {
-  transform: rotateY(180deg);
-  background: radial-gradient(circle at 40% 30%, #FFE44D, var(--poke-yellow) 50%, #E6C800 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  text-align: center;
-  box-shadow:
-    inset -8px -8px 24px rgba(0,0,0,.2),
-    inset 4px 4px 16px rgba(255,255,255,.4);
   overflow: hidden;
 }
 
-.pokeball-back::before {
+/* ── FRENTE — Dorso de carta Pokémon ────────────────────────── */
+.pcard-front {
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(255,255,255,.08), transparent 60%),
+    linear-gradient(135deg, #1a0a2e 0%, #2d1060 40%, #1a0a2e 100%);
+  border: 2px solid rgba(255,222,0,.4);
+  box-shadow:
+    0 0 0 1px rgba(255,222,0,.15),
+    0 8px 32px rgba(0,0,0,.6),
+    inset 0 1px 0 rgba(255,255,255,.1);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: .5rem;
+}
+
+/* Patrón de fondo del dorso */
+.pcard-front::before {
+  content: '';
+  position: absolute; inset: 8px;
+  border: 1.5px solid rgba(255,222,0,.25);
+  border-radius: 8px;
+}
+
+.pcard-front::after {
   content: '';
   position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255,222,0,.03) 10px,
+      rgba(255,222,0,.03) 11px
+    );
+}
+
+.pcard-front-logo {
+  width: 80px; height: 80px;
   border-radius: 50%;
-  border: 8px solid rgba(0,0,0,.15);
+  background: linear-gradient(135deg, var(--poke-red), #ff6b6b);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 30px rgba(238,21,21,.5), 0 0 60px rgba(238,21,21,.2);
+  position: relative; z-index: 1;
+  animation: logoPulse 2s ease-in-out infinite alternate;
+}
+@keyframes logoPulse {
+  from { box-shadow: 0 0 20px rgba(238,21,21,.4); transform: scale(1); }
+  to   { box-shadow: 0 0 40px rgba(238,21,21,.7), 0 0 70px rgba(255,222,0,.2); transform: scale(1.05); }
 }
 
-.pb-num {
+.pcard-front-logo svg {
+  width: 46px; height: 46px; fill: #fff;
+}
+
+.pcard-front-label {
   font-family: 'Press Start 2P', monospace;
-  font-size: .5rem;
-  color: var(--poke-red);
-  margin-bottom: .35rem;
+  font-size: .48rem; color: var(--poke-yellow);
+  letter-spacing: .1em; position: relative; z-index: 1;
+  text-shadow: 0 0 10px rgba(255,222,0,.5);
+}
+
+.pcard-front-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .9rem; color: #fff; position: relative; z-index: 1;
+  text-shadow: 2px 2px 0 var(--poke-red);
+}
+
+.pcard-front-hint {
+  font-family: 'Poppins', sans-serif;
+  font-size: .65rem; color: rgba(255,255,255,.4);
+  position: relative; z-index: 1;
+}
+
+/* ── REVERSO — Info de la semana (carta TCG) ────────────────── */
+.pcard-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(160deg, #fffde7 0%, #fff9c4 40%, #fff3e0 100%);
+  border: 3px solid #c8a400;
+  box-shadow:
+    0 0 0 1px #e8c700,
+    inset 0 0 30px rgba(200,164,0,.1),
+    0 12px 40px rgba(0,0,0,.5);
+  display: flex; flex-direction: column;
+}
+
+/* Borde interior dorado */
+.pcard-back::before {
+  content: '';
+  position: absolute; inset: 6px;
+  border: 1.5px solid rgba(200,164,0,.5);
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Encabezado de la carta */
+.pcard-header {
+  background: linear-gradient(90deg, var(--poke-red), #cc0000);
+  padding: .45rem .75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 1;
+}
+
+.pcard-header-name {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .42rem; color: #fff;
   letter-spacing: .05em;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+  max-width: 120px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-.pb-title {
+.pcard-header-hp {
   font-family: 'Press Start 2P', monospace;
-  font-size: .45rem;
-  color: var(--poke-black);
-  line-height: 1.6;
-  margin-bottom: .5rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  font-size: .38rem; color: #ffdd00;
+  white-space: nowrap;
 }
 
-.pb-desc {
+/* Imagen / ilustración de la carta */
+.pcard-illustration {
+  margin: .4rem .5rem;
+  height: 80px;
+  background: linear-gradient(135deg, #1a237e, #283593, #1565c0);
+  border-radius: 6px;
+  border: 2px solid #c8a400;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; z-index: 1;
+}
+
+.pcard-illustration::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,.15), transparent 50%),
+    repeating-linear-gradient(
+      -45deg, transparent, transparent 8px,
+      rgba(255,255,255,.04) 8px, rgba(255,255,255,.04) 9px
+    );
+}
+
+.pcard-illus-content {
+  text-align: center; position: relative; z-index: 1;
+}
+
+.pcard-illus-num {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.6rem; color: rgba(255,255,255,.15);
+  display: block; line-height: 1;
+}
+
+.pcard-illus-label {
   font-family: 'Poppins', sans-serif;
-  font-size: .6rem;
-  color: #333;
-  line-height: 1.4;
-  margin-bottom: .65rem;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex: 1;
+  font-size: .6rem; color: rgba(255,255,255,.5);
+  font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
 }
 
-.pb-btn {
+/* Tipo y set */
+.pcard-type-bar {
+  padding: .2rem .6rem;
+  display: flex; align-items: center; gap: .4rem;
+  position: relative; z-index: 1;
+}
+
+.pcard-type-badge {
   font-family: 'Press Start 2P', monospace;
-  font-size: .38rem;
-  background: var(--poke-red);
+  font-size: .35rem; padding: .2rem .5rem;
+  background: var(--poke-blue); color: #fff;
+  border-radius: 1rem; letter-spacing: .05em;
+}
+
+.pcard-mat-count {
+  font-family: 'Poppins', sans-serif;
+  font-size: .65rem; color: #666; margin-left: auto;
+}
+
+/* Descripción */
+.pcard-desc-box {
+  margin: 0 .5rem .3rem;
+  background: rgba(255,255,255,.6);
+  border: 1px solid rgba(200,164,0,.4);
+  border-radius: 4px;
+  padding: .4rem .5rem;
+  flex: 1; overflow: hidden;
+  position: relative; z-index: 1;
+}
+
+.pcard-title-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: .4rem; color: #1a1a2e;
+  line-height: 1.6; margin-bottom: .25rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pcard-desc-text {
+  font-family: 'Poppins', sans-serif;
+  font-size: .6rem; color: #444; line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Botón entrar */
+.pcard-btn-wrap {
+  padding: .4rem .5rem .5rem;
+  position: relative; z-index: 1;
+}
+
+.pcard-enter-btn {
+  display: block; width: 100%;
+  font-family: 'Press Start 2P', monospace;
+  font-size: .42rem; text-align: center;
+  background: linear-gradient(135deg, var(--poke-red), #cc1111);
   color: #fff;
-  border: 2px solid var(--poke-black);
-  box-shadow: 2px 2px 0 var(--poke-black);
-  padding: .45rem .7rem;
-  border-radius: .25rem;
+  border: 2px solid #800000;
+  box-shadow: 0 3px 0 #800000, inset 0 1px 0 rgba(255,255,255,.2);
+  padding: .5rem;
+  border-radius: 4px;
   text-decoration: none;
-  display: inline-block;
-  transition: .15s ease;
-  letter-spacing: .03em;
+  transition: .1s ease;
+  cursor: pointer;
 }
-.pb-btn:hover {
-  background: var(--poke-red-d);
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 var(--poke-black);
+
+.pcard-enter-btn:hover,
+.pcard-enter-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #800000;
   color: #fff;
+  background: linear-gradient(135deg, #cc1111, var(--poke-red));
 }
 
-/* ── ADMIN actions ────────────────────────────────────────────── */
-.pokeball-admin-actions {
-  display: flex;
-  gap: .4rem;
-  justify-content: center;
-  margin-top: .5rem;
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity .3s ease, bottom .3s ease;
+/* Pie de la carta */
+.pcard-footer {
+  padding: .2rem .6rem .3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 1;
 }
 
-.pokeball-wrapper:hover .pokeball-admin-actions,
-.pokeball-wrapper.flipped .pokeball-admin-actions {
-  opacity: 1;
-  bottom: -44px;
-}
-
-/* ── Empty state ──────────────────────────────────────────────── */
-.poke-empty {
-  text-align: center;
-  padding: 4rem 2rem;
+.pcard-footer-set {
   font-family: 'Press Start 2P', monospace;
-}
-.poke-empty-ball {
-  font-size: 4rem;
-  display: block;
-  margin-bottom: 1rem;
-  animation: emptyBounce 1s ease-in-out infinite alternate;
-}
-@keyframes emptyBounce {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-12px); }
-}
-.poke-empty h3 {
-  font-size: .65rem;
-  color: var(--poke-yellow);
-  margin-bottom: .75rem;
-}
-.poke-empty p {
-  font-size: .5rem;
-  color: var(--poke-gray);
-  font-family: 'Poppins', sans-serif;
-  font-size: .85rem;
+  font-size: .3rem; color: #aaa; letter-spacing: .05em;
 }
 
-/* ── Modales Pokémon ──────────────────────────────────────────── */
+.pcard-footer-rarity {
+  color: #c8a400; font-size: .8rem;
+}
+
+/* Botones admin debajo de la carta */
+.pcard-admin-actions {
+  display: flex; gap: .4rem; justify-content: center;
+  margin-top: .5rem;
+  opacity: 0; transition: opacity .25s;
+}
+.pcard-scene:hover .pcard-admin-actions,
+.pcard-scene.flipped .pcard-admin-actions {
+  opacity: 1;
+}
+
+/* ══ ADMIN modal Pokémon ═══════════════════════════════════════ */
 .pokemon-page .modal {
   background: #1a1a2e;
   border: 2px solid var(--poke-red);
-  box-shadow: 0 0 40px rgba(238,21,21,.3), 4px 4px 0 var(--poke-black);
+  box-shadow: 0 0 40px rgba(238,21,21,.3), 4px 4px 0 #000;
 }
 .pokemon-page .modal-header {
   background: var(--poke-red);
-  border-bottom-color: var(--poke-black);
+  border-bottom: 2px solid #000;
 }
-.pokemon-page .modal-header h3 { color: #fff; font-family: 'Press Start 2P', monospace; font-size: .65rem; }
-.pokemon-page .modal-header h3 i { color: var(--poke-yellow); }
-.pokemon-page .btn-primary {
+.pokemon-page .modal-header h3 {
   font-family: 'Press Start 2P', monospace;
-  font-size: .5rem;
-  background: var(--poke-red);
-  border: 2px solid var(--poke-black);
-  box-shadow: 2px 2px 0 var(--poke-black);
+  font-size: .6rem; color: #fff;
+}
+.pokemon-page .btn-primary {
+  font-family: 'Press Start 2P', monospace; font-size: .48rem;
+  background: var(--poke-red); border: 2px solid #000;
+  box-shadow: 2px 2px 0 #000;
 }
 .pokemon-page .btn-primary:hover {
-  transform: translate(1px,1px);
-  box-shadow: 1px 1px 0 var(--poke-black);
+  transform: translate(1px,1px); box-shadow: 1px 1px 0 #000;
 }
 .pokemon-page .btn-danger {
-  font-family: 'Press Start 2P', monospace;
-  font-size: .5rem;
-  border: 2px solid var(--poke-black);
-  box-shadow: 2px 2px 0 var(--poke-black);
+  font-family: 'Press Start 2P', monospace; font-size: .48rem;
+  border: 2px solid #000; box-shadow: 2px 2px 0 #000;
 }
+.pokemon-page .btn-danger:hover { transform: translate(1px,1px); box-shadow: 1px 1px 0 #000; }
 .pokemon-page .form-input,
-.pokemon-page .form-textarea {
-  background: #0d1117;
-  border-color: #334155;
-  font-family: 'Poppins', sans-serif;
-}
-.pokemon-page .form-group label {
+.pokemon-page .form-textarea { background: #0d1117; border-color: #334155; }
+.pokemon-page .form-group label { font-family: 'Press Start 2P', monospace; font-size: .48rem; }
+.pokemon-page .btn-secondary { font-family: 'Poppins', sans-serif; }
+
+/* ══ EMPTY STATE ═══════════════════════════════════════════════ */
+.poke-empty { text-align: center; padding: 4rem 2rem; }
+.poke-empty-icon { font-size: 3rem; display: block; margin-bottom: 1rem; }
+.poke-empty h3 {
   font-family: 'Press Start 2P', monospace;
-  font-size: .5rem;
+  font-size: .65rem; color: var(--poke-yellow); margin-bottom: .75rem;
 }
+.poke-empty p { font-family: 'Poppins', sans-serif; color: var(--poke-gray); }
 
-/* ── Responsive ───────────────────────────────────────────────── */
+/* ══ RESPONSIVE ════════════════════════════════════════════════ */
 @media(max-width:768px) {
-  :root { --poke-card-w: 180px; --poke-card-h: 180px; }
-  .poke-section-title { font-size: .75rem; }
-  .poke-section-title { font-size: .7rem; }
-  .pokeball-grid { gap: 2rem; }
-  .pf-button { width: 32px; height: 32px; }
+  :root { --card-w: 170px; --card-h: 245px; }
+  .pokemon-card-grid { gap: 1.25rem; }
+  .poke-section-title { font-size: .65rem; }
 }
-
 @media(max-width:480px) {
-  :root { --poke-card-w: 160px; --poke-card-h: 160px; }
-  .pokeball-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; padding: .5rem; }
+  :root { --card-w: 155px; --card-h: 225px; }
+  .pokemon-card-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 }
