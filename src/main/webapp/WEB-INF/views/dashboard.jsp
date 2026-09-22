@@ -239,56 +239,6 @@
         </section>
         </c:if>
 
-        <!-- ══ SECCIÓN SOBRE MÍ ══════════════════════════════════════ -->
-        <section class="sobre-mi-card">
-            <div class="sobre-mi-header">
-                <div class="sobre-mi-avatar">
-                    <span>ER</span>
-                </div>
-                <div class="sobre-mi-identity">
-                    <div class="sobre-mi-name">Elvis Ramirez Ore</div>
-                    <span class="sobre-mi-badge">
-                        <i class="fas fa-id-card"></i> s01284d
-                    </span>
-                    <div class="sobre-mi-carrera">
-                        <i class="fas fa-university"></i>
-                        Ingeniería de Sistemas y Computación — UPLA
-                    </div>
-                </div>
-            </div>
-
-            <div class="sobre-mi-body">
-                <div class="sobre-mi-desc">
-                    <i class="fas fa-quote-left sobre-mi-quote"></i>
-                    Estudiante de Ingeniería de Sistemas enfocado en la
-                    <strong>arquitectura de software</strong>,
-                    modelado de procesos (<strong>BPMN/UML</strong>),
-                    administración de bases de datos y
-                    desarrollo <strong>web y móvil</strong>.
-                </div>
-
-                <div class="sobre-mi-tools-label">
-                    <i class="fas fa-tools"></i> Herramientas y Tecnologías
-                </div>
-                <div class="sobre-mi-tags">
-                    <span class="stag stag-java"><i class="fab fa-java"></i> Java (Servlets/JSP)</span>
-                    <span class="stag stag-db"><i class="fas fa-database"></i> PostgreSQL / Supabase</span>
-                    <span class="stag stag-db"><i class="fas fa-server"></i> Microsoft SQL Server</span>
-                    <span class="stag stag-devops"><i class="fab fa-docker"></i> Docker &amp; Render</span>
-                    <span class="stag stag-uml"><i class="fas fa-project-diagram"></i> BPMN 2.0 / UML</span>
-                    <span class="stag stag-mobile"><i class="fas fa-mobile-alt"></i> Kotlin / Flutter</span>
-                    <span class="stag stag-net"><i class="fas fa-network-wired"></i> Cisco Packet Tracer</span>
-                    <span class="stag stag-linux"><i class="fab fa-linux"></i> Debian Linux</span>
-                </div>
-            </div>
-
-            <div class="sobre-mi-footer">
-                <i class="fas fa-map-marker-alt"></i> Huancayo, Perú &nbsp;·&nbsp;
-                <i class="fas fa-graduation-cap"></i> Semestre 2026-I
-            </div>
-        </section>
-        <!-- ══ FIN SOBRE MÍ ══════════════════════════════════════════ -->
-
     </div>
 </div>
 
