@@ -8,9 +8,32 @@ import model.Usuario;
 
 import java.io.IOException;
 
+/**
+ * AuthFilter — Solo protege rutas administrativas/de modificación.
+ * Las rutas de lectura (dashboard, semanas, materiales, download) son públicas.
+ */
 public class AuthFilter implements Filter {
 
-    private static final String[] RUTAS_PUBLICAS = { "/login", "/css/", "/js/", "/images/" };
+    // Rutas que requieren ser ADMINISTRADOR autenticado
+    private static final String[] RUTAS_ADMIN = {
+        "/administracion",
+        "/upload",
+        "/deleteMaterial",
+        "/perfil"
+    };
+
+    // Rutas completamente públicas (sin login)
+    private static final String[] RUTAS_PUBLICAS = {
+        "/login",
+        "/logout",
+        "/css/",
+        "/js/",
+        "/images/",
+        "/dashboard",
+        "/semanas",
+        "/materiales",
+        "/download"
+    };
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -21,26 +44,38 @@ public class AuthFilter implements Filter {
 
         String path = req.getRequestURI().substring(req.getContextPath().length());
 
+        // Siempre permitir recursos estáticos y rutas públicas
         if (esRutaPublica(path)) {
             chain.doFilter(request, response);
             return;
         }
 
-        HttpSession session = req.getSession(false);
-        Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
-
-        if (usuario == null) {
-            String urlOriginal = req.getRequestURI();
-            if (req.getQueryString() != null) urlOriginal += "?" + req.getQueryString();
-            req.getSession(true).setAttribute("urlOriginal", urlOriginal);
-            resp.sendRedirect(req.getContextPath() + "/login");
+        // Raíz → redirigir al dashboard (público)
+        if (path.equals("/") || path.isEmpty()) {
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
             return;
         }
 
-        if (!usuario.isActivo()) {
-            session.invalidate();
-            resp.sendRedirect(req.getContextPath() + "/login?error=cuenta_inactiva");
-            return;
+        // Rutas admin → requieren sesión de ADMINISTRADOR
+        if (esRutaAdmin(path)) {
+            HttpSession session = req.getSession(false);
+            Usuario usuario = (session != null) ? (Usuario) session.getAttribute("usuario") : null;
+
+            if (usuario == null) {
+                resp.sendRedirect(req.getContextPath() + "/login?error=requiere_admin");
+                return;
+            }
+
+            if (!usuario.isAdmin()) {
+                resp.sendRedirect(req.getContextPath() + "/dashboard?error=sin_permiso");
+                return;
+            }
+
+            if (!usuario.isActivo()) {
+                session.invalidate();
+                resp.sendRedirect(req.getContextPath() + "/login?error=cuenta_inactiva");
+                return;
+            }
         }
 
         chain.doFilter(request, response);
@@ -48,6 +83,13 @@ public class AuthFilter implements Filter {
 
     private boolean esRutaPublica(String path) {
         for (String ruta : RUTAS_PUBLICAS) {
+            if (path.startsWith(ruta)) return true;
+        }
+        return false;
+    }
+
+    private boolean esRutaAdmin(String path) {
+        for (String ruta : RUTAS_ADMIN) {
             if (path.startsWith(ruta)) return true;
         }
         return false;

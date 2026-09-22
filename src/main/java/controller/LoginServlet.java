@@ -16,6 +16,10 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * LoginServlet — Solo acepta ADMINISTRADORES.
+ * Los usuarios comunes acceden directamente sin login.
+ */
 public class LoginServlet extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
@@ -24,10 +28,15 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
+        // Si ya hay sesión de admin activa, redirigir al dashboard
         HttpSession session = req.getSession(false);
         if (session != null && session.getAttribute("usuario") != null) {
-            resp.sendRedirect(req.getContextPath() + "/dashboard");
-            return;
+            Usuario u = (Usuario) session.getAttribute("usuario");
+            if (u.isAdmin()) {
+                resp.sendRedirect(req.getContextPath() + "/dashboard");
+                return;
+            }
         }
         req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
     }
@@ -46,13 +55,14 @@ public class LoginServlet extends HttpServlet {
         }
 
         try {
+            // 1. Autenticar con Supabase Auth
             String respuestaAuth = SupabaseConfig.signIn(correo.trim(), contrasena);
             JsonObject jsonAuth  = JsonParser.parseString(respuestaAuth).getAsJsonObject();
 
             if (jsonAuth.has("error") || !jsonAuth.has("access_token")) {
                 String msg = jsonAuth.has("error_description")
                         ? jsonAuth.get("error_description").getAsString()
-                        : "Credenciales incorrectas. Verifica tu correo y contraseña.";
+                        : "Credenciales incorrectas.";
                 req.setAttribute("error", msg);
                 req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
                 return;
@@ -73,51 +83,51 @@ public class LoginServlet extends HttpServlet {
                     nombre = meta.get("name").getAsString();
             }
 
-            LOGGER.info("Login intento - authId=" + authId + " email=" + email);
+            LOGGER.info("Login intento admin - authId=" + authId + " email=" + email);
 
+            // 2. Buscar usuario en BD
             Usuario usuario = usuarioDAO.upsertDesdeAuth(authId, email, nombre);
-            LOGGER.info("upsertDesdeAuth resultado: " + (usuario != null ? usuario.getId() : "NULL"));
 
-            // Fallback: si upsert falla, buscar por correo
+            // Fallback por correo
             if (usuario == null) {
-                LOGGER.warning("upsertDesdeAuth falló para authId=" + authId + ", buscando por correo...");
+                LOGGER.warning("upsertDesdeAuth nulo, buscando por correo: " + email);
                 usuario = usuarioDAO.buscarPorCorreo(email);
-                LOGGER.info("buscarPorCorreo resultado: " + (usuario != null ? usuario.getId() : "NULL"));
-                // Si existe por correo, actualizar su auth_id
                 if (usuario != null) {
                     usuarioDAO.actualizarAuthId(usuario.getId(), authId);
-                    usuario.setAuthId(authId);
-                    LOGGER.info("Usuario encontrado por correo, auth_id actualizado.");
                 }
             }
 
             if (usuario == null) {
-                req.setAttribute("error", "Error al recuperar datos del usuario. Intenta de nuevo.");
+                req.setAttribute("error", "No se encontró el usuario en el sistema.");
                 req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
                 return;
             }
 
+            // 3. VERIFICAR QUE SEA ADMINISTRADOR — solo admins pueden entrar
+            if (!usuario.isAdmin()) {
+                req.setAttribute("error", "Acceso denegado. Solo los administradores pueden iniciar sesión.");
+                req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+                return;
+            }
+
+            // 4. Verificar que esté activo
             if (!usuario.isActivo()) {
                 req.setAttribute("error", "Tu cuenta está desactivada. Contacta al administrador.");
                 req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
                 return;
             }
 
+            // 5. Crear sesión para el administrador
             HttpSession session = req.getSession(true);
             session.setAttribute("usuario", usuario);
             session.setAttribute("accessToken", accessToken);
             session.setMaxInactiveInterval(3600);
 
-            String urlOriginal = (String) session.getAttribute("urlOriginal");
-            if (urlOriginal != null && !urlOriginal.contains("/login")) {
-                session.removeAttribute("urlOriginal");
-                resp.sendRedirect(urlOriginal);
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/dashboard");
-            }
+            LOGGER.info("Admin autenticado: " + email);
+            resp.sendRedirect(req.getContextPath() + "/dashboard");
 
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error en login", e);
+            LOGGER.log(Level.SEVERE, "Error en login admin", e);
             req.setAttribute("error", "Error del servidor. Intenta nuevamente.");
             req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
         }

@@ -1,12 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Materiales — EduPlatform</title>
+    <title>Materiales — Arquitectura de Software | UPLA</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/materiales.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
@@ -19,7 +18,16 @@
     <header class="topbar">
         <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         <div class="topbar-title"><h1><i class="fas fa-folder-open"></i> Materiales</h1></div>
-        <div class="topbar-user"><span class="user-greeting">Hola, <strong>${sessionScope.usuario.nombre}</strong></span></div>
+        <div class="topbar-user">
+            <c:choose>
+                <c:when test="${not empty sessionScope.usuario}">
+                    <span class="user-greeting">Hola, <strong>${sessionScope.usuario.nombre}</strong></span>
+                </c:when>
+                <c:otherwise>
+                    <span class="user-greeting" style="color:#64748B;"><i class="fas fa-eye"></i> Modo lectura</span>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </header>
 
     <div class="page-content">
@@ -28,9 +36,11 @@
             <div class="toast toast-success" id="toastMsg"><i class="fas fa-check-circle"></i> Material eliminado.</div>
         </c:if>
 
-        <!-- Filtros rápidos -->
+        <!-- Filtros rápidos por tipo -->
         <div class="quick-filters">
-            <a href="${pageContext.request.contextPath}/materiales" class="qfilter ${empty filtroTipo ? 'active' : ''}"><i class="fas fa-th"></i> Todos</a>
+            <a href="${pageContext.request.contextPath}/materiales" class="qfilter ${empty filtroTipo ? 'active' : ''}">
+                <i class="fas fa-th"></i> Todos
+            </a>
             <a href="?tipo=PDF"        class="qfilter ${filtroTipo eq 'PDF'         ? 'active' : ''}"><i class="fas fa-file-pdf"></i> PDF</a>
             <a href="?tipo=IMAGE"      class="qfilter ${filtroTipo eq 'IMAGE'       ? 'active' : ''}"><i class="fas fa-file-image"></i> Imágenes</a>
             <a href="?tipo=WORD"       class="qfilter ${filtroTipo eq 'WORD'        ? 'active' : ''}"><i class="fas fa-file-word"></i> Word</a>
@@ -42,13 +52,18 @@
         <div class="search-panel">
             <form action="${pageContext.request.contextPath}/materiales" method="get">
                 <div class="search-grid">
-                    <div class="form-group"><label><i class="fas fa-search"></i> Nombre</label><input type="text" name="nombre" class="form-input" placeholder="Buscar..." value="${filtroNombre}"></div>
+                    <div class="form-group">
+                        <label><i class="fas fa-search"></i> Nombre</label>
+                        <input type="text" name="nombre" class="form-input" placeholder="Buscar..." value="${filtroNombre}">
+                    </div>
                     <div class="form-group">
                         <label><i class="fas fa-calendar-week"></i> Semana</label>
                         <select name="semanaId" class="form-select">
                             <option value="">Todas las semanas</option>
                             <c:forEach var="s" items="${semanas}">
-                                <option value="${s.id}" ${filtroSemanaId eq s.id.toString() ? 'selected' : ''}>${s.numeroFormateado} — ${s.titulo}</option>
+                                <option value="${s.id}" ${filtroSemanaId eq s.id.toString() ? 'selected' : ''}>
+                                    ${s.numeroFormateado} — ${s.titulo}
+                                </option>
                             </c:forEach>
                         </select>
                     </div>
@@ -75,18 +90,32 @@
             </form>
         </div>
 
-        <div class="results-header"><span><i class="fas fa-list"></i> ${materiales.size()} resultado(s)</span></div>
+        <div class="results-header">
+            <span><i class="fas fa-list"></i> ${materiales.size()} resultado(s)</span>
+            <%-- Indicador de modo lectura para visitantes --%>
+            <c:if test="${empty sessionScope.usuario}">
+                <span style="font-size:.78rem;color:#64748B;">
+                    <i class="fas fa-eye"></i> Modo lectura —
+                    <a href="${pageContext.request.contextPath}/login" style="color:#38BDF8;">Iniciar sesión como admin</a>
+                </span>
+            </c:if>
+        </div>
 
         <c:choose>
             <c:when test="${empty materiales}">
-                <div class="empty-state"><i class="fas fa-search"></i><h3>Sin resultados</h3><p>No se encontraron materiales.</p></div>
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>Sin resultados</h3>
+                    <p>No se encontraron materiales con los filtros aplicados.</p>
+                </div>
             </c:when>
             <c:otherwise>
                 <div class="material-table-wrapper">
                     <table class="material-table">
                         <thead>
                             <tr>
-                                <th>Archivo</th><th>Tipo</th><th>Semana</th><th>Subido por</th><th>Tamaño</th><th>Fecha</th><th>Acciones</th>
+                                <th>Archivo</th><th>Tipo</th><th>Semana</th>
+                                <th>Subido por</th><th>Tamaño</th><th>Fecha</th><th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -107,13 +136,21 @@
                                 <td>${m.tamanoFormateado}</td>
                                 <td>${m.fechaSubidaStr}</td>
                                 <td class="td-actions">
-                                    <a href="${pageContext.request.contextPath}/download?id=${m.id}" class="btn-icon btn-download" title="Descargar"><i class="fas fa-download"></i></a>
-                                    <c:if test="${sessionScope.usuario.admin or sessionScope.usuario.id eq m.usuarioId}">
-                                    <form action="${pageContext.request.contextPath}/deleteMaterial" method="post" class="inline-form"
+                                    <%-- Descarga disponible para todos --%>
+                                    <a href="${pageContext.request.contextPath}/download?id=${m.id}"
+                                       class="btn-icon btn-download" title="Descargar">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    <%-- Eliminar solo para ADMIN --%>
+                                    <c:if test="${not empty sessionScope.usuario and sessionScope.usuario.admin}">
+                                    <form action="${pageContext.request.contextPath}/deleteMaterial"
+                                          method="post" class="inline-form"
                                           onsubmit="return confirm('¿Eliminar ${m.nombreOriginal}?')">
                                         <input type="hidden" name="id" value="${m.id}">
                                         <input type="hidden" name="origen" value="materiales">
-                                        <button type="submit" class="btn-icon btn-delete" title="Eliminar"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn-icon btn-delete" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                     </c:if>
                                 </td>

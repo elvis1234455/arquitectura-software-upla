@@ -1,12 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${semana.numeroFormateado} — EduPlatform</title>
+    <title>${semana.numeroFormateado} — Arquitectura de Software | UPLA</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/semanas.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/materiales.css">
@@ -23,7 +22,16 @@
             <a href="${pageContext.request.contextPath}/semanas" class="topbar-back"><i class="fas fa-arrow-left"></i></a>
             <h1><i class="fas fa-calendar-week"></i> ${semana.numeroFormateado}</h1>
         </div>
-        <div class="topbar-user"><span class="user-greeting">Hola, <strong>${sessionScope.usuario.nombre}</strong></span></div>
+        <div class="topbar-user">
+            <c:choose>
+                <c:when test="${not empty sessionScope.usuario}">
+                    <span class="user-greeting">Hola, <strong>${sessionScope.usuario.nombre}</strong></span>
+                </c:when>
+                <c:otherwise>
+                    <span class="user-greeting" style="color:#64748B;"><i class="fas fa-eye"></i> Modo lectura</span>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </header>
 
     <div class="page-content">
@@ -70,56 +78,70 @@
 
         <div class="detalle-grid">
 
-            <!-- Formulario de subida -->
-            <div class="upload-panel">
-                <div class="panel-header"><i class="fas fa-cloud-upload-alt"></i> Subir Material</div>
-                <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data" id="uploadForm">
-                    <input type="hidden" name="semanaId" value="${semana.id}">
-
-                    <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('archivoInput').click()">
-                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                        <p class="upload-text">Arrastra tu archivo aquí</p>
-                        <p class="upload-subtext">o haz clic para seleccionar</p>
-                        <span class="upload-types">PDF · Word · Excel · PPT · Imagen · ZIP · TXT</span>
-                        <input type="file" id="archivoInput" name="archivo" class="upload-input" required
-                               accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.txt,.zip">
-                    </div>
-
-                    <div class="file-preview" id="filePreview" style="display:none">
-                        <div class="file-preview-icon" id="previewIcon"><i class="fas fa-file"></i></div>
-                        <div class="file-preview-info">
-                            <span class="file-preview-name" id="previewName"></span>
-                            <span class="file-preview-size" id="previewSize"></span>
+            <%-- Panel de subida: SOLO para ADMIN --%>
+            <c:choose>
+                <c:when test="${not empty sessionScope.usuario and sessionScope.usuario.admin}">
+                <div class="upload-panel">
+                    <div class="panel-header"><i class="fas fa-cloud-upload-alt"></i> Subir Material</div>
+                    <form action="${pageContext.request.contextPath}/upload"
+                          method="post" enctype="multipart/form-data" id="uploadForm">
+                        <input type="hidden" name="semanaId" value="${semana.id}">
+                        <div class="upload-dropzone" id="dropzone" onclick="document.getElementById('archivoInput').click()">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <p class="upload-text">Arrastra tu archivo aquí</p>
+                            <p class="upload-subtext">o haz clic para seleccionar</p>
+                            <span class="upload-types">PDF · Word · Excel · PPT · Imagen · ZIP · TXT</span>
+                            <input type="file" id="archivoInput" name="archivo" class="upload-input" required
+                                   accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.txt,.zip">
                         </div>
-                        <button type="button" class="file-preview-remove" onclick="resetUpload()"><i class="fas fa-times"></i></button>
+                        <div class="file-preview" id="filePreview" style="display:none">
+                            <div class="file-preview-icon" id="previewIcon"><i class="fas fa-file"></i></div>
+                            <div class="file-preview-info">
+                                <span class="file-preview-name" id="previewName"></span>
+                                <span class="file-preview-size" id="previewSize"></span>
+                            </div>
+                            <button type="button" class="file-preview-remove" onclick="resetUpload()"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label>Descripción (opcional)</label>
+                            <textarea name="descripcion" rows="2" class="form-textarea" placeholder="Breve descripción..."></textarea>
+                        </div>
+                        <div class="upload-progress" id="uploadProgress" style="display:none">
+                            <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
+                            <span id="progressText">Subiendo...</span>
+                        </div>
+                        <button type="submit" class="btn-upload" id="btnUpload">
+                            <i class="fas fa-upload"></i> Subir Archivo
+                        </button>
+                    </form>
+                    <p class="upload-note"><i class="fas fa-info-circle"></i> Tamaño máximo: 50 MB</p>
+                </div>
+                </c:when>
+                <c:otherwise>
+                <%-- Visitante: mostrar mensaje informativo en lugar del panel de subida --%>
+                <div class="upload-panel">
+                    <div class="panel-header"><i class="fas fa-info-circle"></i> Acceso de Invitado</div>
+                    <div style="padding:2rem;text-align:center;">
+                        <i class="fas fa-lock" style="font-size:2.5rem;color:#334155;margin-bottom:1rem;display:block;"></i>
+                        <p style="color:#94A3B8;font-size:.9rem;margin-bottom:1.25rem;">
+                            Estás en modo lectura. Puedes ver y descargar los materiales disponibles.
+                        </p>
+                        <a href="${pageContext.request.contextPath}/login" class="btn-primary btn-sm">
+                            <i class="fas fa-shield-alt"></i> Iniciar sesión como admin
+                        </a>
                     </div>
+                </div>
+                </c:otherwise>
+            </c:choose>
 
-                    <div class="form-group mt-2">
-                        <label>Descripción (opcional)</label>
-                        <textarea name="descripcion" rows="2" class="form-textarea" placeholder="Breve descripción del material..."></textarea>
-                    </div>
-
-                    <div class="upload-progress" id="uploadProgress" style="display:none">
-                        <div class="progress-bar-track"><div class="progress-bar-fill" id="progressFill"></div></div>
-                        <span id="progressText">Subiendo...</span>
-                    </div>
-
-                    <button type="submit" class="btn-upload" id="btnUpload">
-                        <i class="fas fa-upload"></i> Subir Archivo
-                    </button>
-                </form>
-                <p class="upload-note"><i class="fas fa-info-circle"></i> Tamaño máximo: 50 MB</p>
-            </div>
-
-            <!-- Lista de materiales -->
+            <!-- Lista de materiales (visible para todos) -->
             <div class="materiales-panel">
                 <div class="panel-header"><i class="fas fa-paperclip"></i> Materiales (${semana.cantidadMateriales})</div>
-
                 <c:choose>
                     <c:when test="${empty materiales}">
                         <div class="empty-state-sm">
                             <i class="fas fa-folder-open"></i>
-                            <p>No hay materiales aún. ¡Sé el primero en subir algo!</p>
+                            <p>No hay materiales en esta semana aún.</p>
                         </div>
                     </c:when>
                     <c:otherwise>
@@ -138,15 +160,21 @@
                                     <c:if test="${not empty m.descripcion}"><p class="material-desc">${m.descripcion}</p></c:if>
                                 </div>
                                 <div class="material-actions">
-                                    <a href="${pageContext.request.contextPath}/download?id=${m.id}" class="btn-icon btn-download" title="Descargar">
+                                    <%-- Descarga disponible para todos --%>
+                                    <a href="${pageContext.request.contextPath}/download?id=${m.id}"
+                                       class="btn-icon btn-download" title="Descargar">
                                         <i class="fas fa-download"></i>
                                     </a>
-                                    <c:if test="${sessionScope.usuario.admin or sessionScope.usuario.id eq m.usuarioId}">
-                                    <form action="${pageContext.request.contextPath}/deleteMaterial" method="post" class="inline-form"
+                                    <%-- Eliminar solo para ADMIN --%>
+                                    <c:if test="${not empty sessionScope.usuario and sessionScope.usuario.admin}">
+                                    <form action="${pageContext.request.contextPath}/deleteMaterial"
+                                          method="post" class="inline-form"
                                           onsubmit="return confirm('¿Eliminar este material?')">
                                         <input type="hidden" name="id" value="${m.id}">
                                         <input type="hidden" name="origen" value="semana">
-                                        <button type="submit" class="btn-icon btn-delete" title="Eliminar"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn-icon btn-delete" title="Eliminar">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </form>
                                     </c:if>
                                 </div>
@@ -156,7 +184,6 @@
                     </c:otherwise>
                 </c:choose>
             </div>
-
         </div>
     </div>
 </div>
