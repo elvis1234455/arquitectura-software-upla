@@ -127,8 +127,15 @@ public class LoginServlet extends HttpServlet {
             resp.sendRedirect(req.getContextPath() + "/dashboard");
 
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Error en login admin", e);
-            req.setAttribute("error", "Error del servidor. Intenta nuevamente.");
+            LOGGER.log(Level.SEVERE, "Error en login admin: " + e.getClass().getName() + " - " + e.getMessage(), e);
+            // Mostrar mensaje más descriptivo
+            String errorMsg = "Error del servidor: " + e.getMessage();
+            if (e.getMessage() != null && e.getMessage().contains("Connection")) {
+                errorMsg = "Error de conexión a la base de datos. Intenta nuevamente.";
+            } else if (e.getMessage() != null && e.getMessage().contains("password")) {
+                errorMsg = "Error de autenticación con la base de datos.";
+            }
+            req.setAttribute("error", errorMsg);
             req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
         }
     }
