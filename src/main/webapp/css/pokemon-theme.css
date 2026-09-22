@@ -192,14 +192,10 @@
 .pokeball-wrapper {
   width: var(--poke-card-w);
   height: var(--poke-card-h);
-  perspective: 800px;
+  perspective: 1000px;
   cursor: pointer;
   position: relative;
-}
-
-.pokeball-wrapper:hover .pokeball-inner,
-.pokeball-wrapper.flipped .pokeball-inner {
-  transform: rotateY(180deg);
+  margin-bottom: 50px;
 }
 
 .pokeball-inner {
@@ -208,11 +204,20 @@
   transform-style: preserve-3d;
   transition: transform .7s cubic-bezier(.4,0,.2,1);
   border-radius: 50%;
-  filter: drop-shadow(0 8px 24px rgba(238,21,21,.5));
 }
 
-.pokeball-wrapper:hover .pokeball-inner {
+/* Flip via clase JS (para click/touch) */
+.pokeball-wrapper.flipped .pokeball-inner {
+  transform: rotateY(180deg);
   filter: drop-shadow(0 12px 32px rgba(255,222,0,.6));
+}
+
+/* Flip via hover en desktop */
+@media (hover: hover) {
+  .pokeball-wrapper:hover .pokeball-inner {
+    transform: rotateY(180deg);
+    filter: drop-shadow(0 12px 32px rgba(255,222,0,.6));
+  }
 }
 
 /* ── FRENTE — Pokébola ────────────────────────────────────────── */
@@ -222,13 +227,14 @@
   border-radius: 50%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  overflow: hidden;
 }
 
 .pokeball-front {
-  overflow: hidden;
   box-shadow:
     inset -12px -12px 30px rgba(0,0,0,.4),
     inset 6px 6px 20px rgba(255,255,255,.15);
+  z-index: 1;
 }
 
 /* Mitad superior roja */
