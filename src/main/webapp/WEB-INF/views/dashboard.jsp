@@ -8,9 +8,15 @@
     <title>Inicio — Arquitectura de Software | UPLA</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pokemon-theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+<%-- LOADER POKÉMON --%>
+<div id="pokemon-loader">
+    <div class="loader-pokeball"></div>
+    <div class="loader-text">CARGANDO<br>PLATAFORMA...</div>
+</div>
 <jsp:include page="sidebar.jsp"/>
 <div class="main-content" id="mainContent">
 
@@ -244,5 +250,6 @@
 
 <script src="${pageContext.request.contextPath}/js/app.js"></script>
 <script src="${pageContext.request.contextPath}/js/dashboard.js"></script>
+<script src="${pageContext.request.contextPath}/js/pokemon-app.js"></script>
 </body>
 </html>

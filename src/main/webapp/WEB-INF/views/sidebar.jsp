@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/pokemon-theme.css">
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <div class="sidebar-logo">

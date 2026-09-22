@@ -8,6 +8,7 @@
     <title>Sobre mí — Elvis Ramirez Ore | UPLA</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/dashboard.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/responsive.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pokemon-theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         /* ══ SOBRE MÍ — Página completa ══════════════════════════════ */
@@ -408,5 +409,6 @@
 </div>
 
 <script src="${pageContext.request.contextPath}/js/app.js"></script>
+<script src="${pageContext.request.contextPath}/js/pokemon-app.js"></script>
 </body>
 </html>

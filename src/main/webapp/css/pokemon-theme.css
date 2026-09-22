@@ -329,3 +329,380 @@
   :root { --card-w: 158px; --card-h: 235px; }
   .pokemon-card-grid { grid-template-columns: repeat(2,1fr); gap: 1rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ESTILOS GLOBALES POKÉMON — Todas las páginas
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Aplica fondo oscuro a TODAS las páginas */
+body {
+  background: var(--poke-bg) !important;
+  color: #CBD5E1 !important;
+}
+
+/* Sidebar tema Pokémon */
+.sidebar {
+  background: #0d1117 !important;
+  border-right: 2px solid rgba(238,21,21,.3) !important;
+}
+.sidebar-header {
+  border-bottom: 1px solid rgba(238,21,21,.25) !important;
+}
+.sidebar-brand {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .55rem !important;
+  color: var(--poke-yellow) !important;
+  text-shadow: 1px 1px 0 var(--poke-red) !important;
+}
+.sidebar-user {
+  border-bottom: 1px solid rgba(255,255,255,.06) !important;
+}
+.sidebar-user-name {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 700 !important;
+  color: #F8FAFC !important;
+}
+.sidebar-user-role {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .38rem !important;
+}
+.nav-link {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .42rem !important;
+  letter-spacing: .05em !important;
+  color: #94A3B8 !important;
+}
+.nav-link:hover {
+  background: rgba(238,21,21,.12) !important;
+  color: var(--poke-yellow) !important;
+  border-left: 3px solid var(--poke-red) !important;
+}
+.nav-link.active {
+  background: rgba(238,21,21,.18) !important;
+  color: var(--poke-yellow) !important;
+}
+.nav-link.active::before { background: var(--poke-red) !important; }
+.nav-separator span {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .35rem !important;
+  color: rgba(238,21,21,.6) !important;
+  letter-spacing: .1em !important;
+}
+.nav-logout { color: var(--poke-red) !important; }
+.nav-logout:hover { background: rgba(238,21,21,.15) !important; }
+.sidebar-footer { border-top: 1px solid rgba(255,255,255,.06) !important; }
+
+/* Topbar tema Pokémon */
+.topbar {
+  background: rgba(13,17,23,.97) !important;
+  border-bottom: 2px solid var(--poke-red) !important;
+}
+.topbar-title h1 {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .65rem !important;
+  color: var(--poke-yellow) !important;
+  text-shadow: 2px 2px 0 var(--poke-red) !important;
+}
+.topbar-title h1 i { color: var(--poke-red) !important; }
+.topbar-back {
+  color: var(--poke-red) !important;
+  font-size: 1.1rem !important;
+}
+.user-greeting { color: #94A3B8 !important; }
+.user-greeting strong { color: var(--poke-yellow) !important; }
+.user-avatar {
+  background: linear-gradient(135deg, var(--poke-red), #cc1111) !important;
+  border: 2px solid var(--poke-yellow) !important;
+}
+
+/* Toast tema Pokémon */
+.toast {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .48rem !important;
+}
+.toast-success {
+  background: rgba(255,222,0,.1) !important;
+  border-color: var(--poke-yellow) !important;
+  color: var(--poke-yellow) !important;
+}
+.toast-error {
+  background: rgba(238,21,21,.1) !important;
+  border-color: var(--poke-red) !important;
+  color: #fca5a5 !important;
+}
+
+/* Botones globales Pokémon */
+.btn-primary {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .46rem !important;
+  background: var(--poke-red) !important;
+  border: 2px solid #800 !important;
+  box-shadow: 0 3px 0 #800 !important;
+  letter-spacing: .04em !important;
+}
+.btn-primary:hover {
+  background: #cc1111 !important;
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 #800 !important;
+}
+.btn-secondary {
+  font-family: 'Poppins', sans-serif !important;
+  border-color: rgba(238,21,21,.3) !important;
+}
+.btn-danger {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .46rem !important;
+  border: 2px solid #800 !important;
+  box-shadow: 0 3px 0 #800 !important;
+}
+.btn-danger:hover { transform: translateY(2px) !important; box-shadow: 0 1px 0 #800 !important; }
+.btn-admin-login {
+  background: rgba(238,21,21,.15) !important;
+  border-color: rgba(238,21,21,.4) !important;
+  color: var(--poke-yellow) !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .4rem !important;
+}
+.btn-admin-login:hover { background: rgba(238,21,21,.3) !important; color: #fff !important; }
+
+/* Cards / Section cards tema Pokémon */
+.info-card, .section-card, .stat-card,
+.stat-card-admin, .table-wrapper, .search-panel,
+.mis-materiales, .perfil-card, .upload-panel,
+.materiales-panel, .semana-contenido-card,
+.semana-detail-banner, .section-card {
+  background: #0d1117 !important;
+  border-color: rgba(238,21,21,.2) !important;
+}
+.info-card-header, .section-card-header, .panel-header {
+  background: rgba(238,21,21,.08) !important;
+  border-bottom-color: rgba(238,21,21,.2) !important;
+}
+.info-card-header h2, .section-card-header h2 {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .55rem !important;
+  color: var(--poke-yellow) !important;
+}
+.info-card-header i, .section-card-header i { color: var(--poke-red) !important; }
+.panel-header {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .45rem !important;
+  color: var(--poke-yellow) !important;
+}
+.panel-header i { color: var(--poke-red) !important; }
+
+/* Stats */
+.stat-card { border-left: 3px solid var(--poke-red) !important; }
+.stat-value { color: var(--poke-yellow) !important; font-family: 'Press Start 2P', monospace !important; font-size: 1.4rem !important; }
+.stat-label { font-family: 'Press Start 2P', monospace !important; font-size: .35rem !important; color: #94A3B8 !important; }
+.stat-blue .stat-icon  { background: rgba(238,21,21,.2) !important; color: var(--poke-red) !important; }
+.stat-green .stat-icon { background: rgba(255,222,0,.15) !important; color: var(--poke-yellow) !important; }
+.stat-purple .stat-icon{ background: rgba(59,76,202,.2) !important; color: #7b93ff !important; }
+.stat-orange .stat-icon{ background: rgba(238,21,21,.2) !important; color: #ff6b6b !important; }
+
+/* Formularios */
+.form-input, .form-textarea, .form-select {
+  background: #0d1117 !important;
+  border-color: rgba(238,21,21,.25) !important;
+  color: #F8FAFC !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+.form-input:focus, .form-textarea:focus, .form-select:focus {
+  border-color: var(--poke-red) !important;
+  box-shadow: 0 0 0 3px rgba(238,21,21,.18) !important;
+}
+.form-group label {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .42rem !important;
+  color: var(--poke-gray) !important;
+}
+
+/* Modales */
+.modal {
+  background: #0d1117 !important;
+  border: 2px solid var(--poke-red) !important;
+  box-shadow: 0 0 40px rgba(238,21,21,.3), 4px 4px 0 #000 !important;
+}
+.modal-header {
+  background: var(--poke-red) !important;
+  border-bottom: 2px solid #000 !important;
+}
+.modal-header h3 {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .55rem !important;
+  color: #fff !important;
+}
+.modal-header h3 i { color: var(--poke-yellow) !important; }
+.modal-body p { font-family: 'Poppins', sans-serif !important; color: #CBD5E1 !important; }
+
+/* Tablas */
+.material-table thead { background: rgba(238,21,21,.08) !important; }
+.material-table th {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .38rem !important;
+  color: var(--poke-yellow) !important;
+}
+.material-table td { color: #CBD5E1 !important; font-family: 'Poppins', sans-serif !important; }
+.material-table tbody tr:hover { background: rgba(238,21,21,.05) !important; }
+.admin-table thead { background: rgba(238,21,21,.08) !important; }
+.admin-table th {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .35rem !important;
+  color: var(--poke-yellow) !important;
+}
+.admin-table td { color: #CBD5E1 !important; }
+
+/* Quick filters */
+.qfilter {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .38rem !important;
+  border-color: rgba(238,21,21,.25) !important;
+  color: #94A3B8 !important;
+}
+.qfilter:hover, .qfilter.active {
+  background: rgba(238,21,21,.15) !important;
+  color: var(--poke-yellow) !important;
+  border-color: rgba(238,21,21,.4) !important;
+}
+
+/* Badges */
+.badge-administrador { background: rgba(238,21,21,.2) !important; color: var(--poke-red) !important; border-color: rgba(238,21,21,.35) !important; }
+.badge-usuario       { background: rgba(255,222,0,.12) !important; color: var(--poke-yellow) !important; border-color: rgba(255,222,0,.3) !important; }
+.badge-activo   { background: rgba(255,222,0,.12) !important; color: var(--poke-yellow) !important; border-color: rgba(255,222,0,.3) !important; }
+.badge-inactivo { background: rgba(238,21,21,.12) !important; color: #fca5a5 !important; border-color: rgba(238,21,21,.3) !important; }
+
+/* Empty states */
+.empty-state i, .empty-state-sm i { color: var(--poke-red) !important; }
+.empty-state h3 { font-family: 'Press Start 2P', monospace !important; font-size: .55rem !important; color: var(--poke-yellow) !important; }
+
+/* Semana detail banner */
+.semana-detail-banner {
+  background: linear-gradient(135deg, #0d1117 0%, #1a0a2e 100%) !important;
+  border-color: rgba(238,21,21,.3) !important;
+}
+.semana-detail-num { color: rgba(255,222,0,.2) !important; }
+.semana-detail-info h2 { color: var(--poke-yellow) !important; }
+.semana-detail-meta span {
+  background: rgba(238,21,21,.1) !important;
+  border-color: rgba(238,21,21,.25) !important;
+  color: var(--poke-yellow) !important;
+}
+
+/* Upload */
+.upload-dropzone {
+  border-color: rgba(238,21,21,.3) !important;
+  background: rgba(238,21,21,.04) !important;
+}
+.upload-dropzone:hover {
+  border-color: var(--poke-red) !important;
+  background: rgba(238,21,21,.08) !important;
+}
+.upload-icon { color: var(--poke-red) !important; }
+.btn-upload {
+  background: linear-gradient(135deg, var(--poke-red), #cc1111) !important;
+  border: 2px solid #800 !important;
+  box-shadow: 0 3px 0 #800 !important;
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .45rem !important;
+}
+.btn-upload:hover { transform: translateY(2px) !important; box-shadow: 0 1px 0 #800 !important; }
+.progress-bar-fill { background: linear-gradient(90deg, var(--poke-red), var(--poke-yellow)) !important; }
+
+/* Material items */
+.material-item:hover { background: rgba(238,21,21,.05) !important; }
+.material-name { color: #F8FAFC !important; }
+.material-type {
+  background: rgba(238,21,21,.1) !important;
+  color: var(--poke-yellow) !important;
+}
+
+/* Section links */
+.section-link { color: var(--poke-yellow) !important; }
+.section-link:hover { color: #fff !important; }
+
+/* Perfil */
+.perfil-avatar-placeholder { background: linear-gradient(135deg, var(--poke-red), #cc1111) !important; }
+.perfil-avatar-img { border-color: var(--poke-red) !important; }
+.perfil-nombre { color: var(--poke-yellow) !important; font-family: 'Press Start 2P', monospace !important; font-size: .85rem !important; }
+.perfil-correo i { color: var(--poke-red) !important; }
+.pstat-val { color: var(--poke-yellow) !important; font-family: 'Press Start 2P', monospace !important; }
+
+/* Admin tabs */
+.admin-tabs { background: #0d1117 !important; border-color: rgba(238,21,21,.2) !important; }
+.tab-btn {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: .38rem !important;
+  color: #64748B !important;
+}
+.tab-btn.active {
+  background: var(--poke-red) !important;
+  box-shadow: 0 3px 0 #800 !important;
+}
+.tab-btn:hover { color: var(--poke-yellow) !important; }
+
+/* Semanas preview (dashboard) */
+.semana-preview-card {
+  background: #0d1117 !important;
+  border-color: rgba(238,21,21,.2) !important;
+}
+.semana-preview-card:hover { border-color: var(--poke-red) !important; }
+.semana-preview-num { color: var(--poke-yellow) !important; }
+.semana-preview-card h3 { color: #F8FAFC !important; }
+.semana-preview-footer a { color: var(--poke-yellow) !important; }
+
+/* Course hero */
+.course-hero-bg {
+  background: linear-gradient(135deg, #0d1117 0%, #1a0a2e 50%, #0d1117 100%) !important;
+}
+.course-badge {
+  background: rgba(238,21,21,.15) !important;
+  border-color: rgba(238,21,21,.35) !important;
+  color: var(--poke-yellow) !important;
+}
+.course-title { text-shadow: 3px 3px 0 var(--poke-red) !important; }
+.pill {
+  background: rgba(238,21,21,.1) !important;
+  border-color: rgba(238,21,21,.2) !important;
+  color: #CBD5E1 !important;
+}
+.eval-bar { background: linear-gradient(90deg, var(--poke-red), var(--poke-yellow)) !important; }
+.resultado-tag { background: linear-gradient(135deg, var(--poke-red), #cc1111) !important; }
+.unidad-marker { background: linear-gradient(135deg, var(--poke-red), #cc1111) !important; }
+.unidad-tags span {
+  background: rgba(238,21,21,.12) !important;
+  color: var(--poke-yellow) !important;
+  border-color: rgba(238,21,21,.25) !important;
+}
+.objective-number { color: rgba(238,21,21,.35) !important; }
+.competencia-item i { color: var(--poke-yellow) !important; }
+
+/* Sobre mí */
+.sm-hero { background: linear-gradient(135deg, #0d1117 0%, #1a0a2e 50%, #0d1117 100%) !important; border-color: rgba(238,21,21,.3) !important; }
+.sm-hero::before { background: linear-gradient(90deg, var(--poke-red), var(--poke-yellow), var(--poke-red)) !important; }
+.sm-avatar-big { background: linear-gradient(135deg, var(--poke-red), #cc1111) !important; }
+.sm-hero-name { color: var(--poke-yellow) !important; font-family: 'Press Start 2P', monospace !important; font-size: .95rem !important; }
+.sm-badge-code { background: rgba(238,21,21,.15) !important; border-color: rgba(238,21,21,.35) !important; color: var(--poke-yellow) !important; }
+.sm-badge-carrera { background: rgba(59,76,202,.15) !important; border-color: rgba(59,76,202,.3) !important; color: #7b93ff !important; }
+.sm-badge-upla { background: rgba(255,222,0,.1) !important; border-color: rgba(255,222,0,.3) !important; color: var(--poke-yellow) !important; }
+.sm-section { background: #0d1117 !important; border-color: rgba(238,21,21,.2) !important; }
+.sm-section-header { background: rgba(238,21,21,.07) !important; border-bottom-color: rgba(238,21,21,.2) !important; }
+.sm-section-header i { color: var(--poke-red) !important; }
+.sm-section-header h2 { font-family: 'Press Start 2P', monospace !important; font-size: .55rem !important; color: var(--poke-yellow) !important; }
+.sm-desc-body { border-left-color: var(--poke-red) !important; }
+.sm-tools-label i { color: var(--poke-red) !important; }
+.sm-interest { background: rgba(238,21,21,.08) !important; border-color: rgba(238,21,21,.2) !important; }
+.sm-interest i { color: var(--poke-yellow) !important; }
+.sm-info-item { background: rgba(238,21,21,.05) !important; border-color: rgba(238,21,21,.15) !important; }
+.sm-info-item i { color: var(--poke-red) !important; }
+.sm-info-value { color: var(--poke-yellow) !important; }
+
+/* Tech items */
+.sm-tech-item { background: rgba(255,255,255,.03) !important; border-color: rgba(238,21,21,.15) !important; }
+.sm-tech-item:hover { border-color: rgba(238,21,21,.4) !important; background: rgba(238,21,21,.06) !important; }
+.sm-tech-name { color: #F8FAFC !important; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0d1117; }
+::-webkit-scrollbar-thumb { background: var(--poke-red); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--poke-yellow); }
