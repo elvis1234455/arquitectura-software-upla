@@ -99,6 +99,8 @@
             <c:otherwise>
                 <div class="pokeball-grid">
                     <c:forEach var="semana" items="${semanas}" varStatus="st">
+                    <%-- Contenedor externo con perspectiva --%>
+                    <div class="pokeball-scene">
                     <div class="pokeball-wrapper" data-semana-id="${semana.id}">
 
                         <%-- ── INNER (contenedor 3D) ── --%>
@@ -160,6 +162,7 @@
                         </c:if>
 
                     </div><%-- /pokeball-wrapper --%>
+                    </div><%-- /pokeball-scene --%>
                     </c:forEach>
                 </div><%-- /pokeball-grid --%>
             </c:otherwise>
