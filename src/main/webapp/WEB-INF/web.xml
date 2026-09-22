@@ -130,6 +130,16 @@
         <url-pattern>/perfil</url-pattern>
     </servlet-mapping>
 
+    <!-- Sobre mí (público) -->
+    <servlet>
+        <servlet-name>SobreMiServlet</servlet-name>
+        <servlet-class>controller.SobreMiServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SobreMiServlet</servlet-name>
+        <url-pattern>/sobre-mi</url-pattern>
+    </servlet-mapping>
+
     <!-- ═══ SESIÓN ═══ -->
     <session-config>
         <session-timeout>60</session-timeout>

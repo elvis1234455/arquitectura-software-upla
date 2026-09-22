@@ -32,7 +32,8 @@ public class AuthFilter implements Filter {
         "/dashboard",
         "/semanas",
         "/materiales",
-        "/download"
+        "/download",
+        "/sobre-mi"
     };
 
     @Override

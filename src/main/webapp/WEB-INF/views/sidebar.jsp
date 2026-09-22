@@ -10,7 +10,6 @@
         <button class="sidebar-close" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
     </div>
 
-    <%-- Mostrar info de usuario si hay sesión, sino mostrar "Visitante" --%>
     <div class="sidebar-user">
         <div class="sidebar-avatar">
             <c:choose>
@@ -57,32 +56,17 @@
                 <i class="fas fa-folder-open"></i><span>Materiales</span>
             </a>
         </li>
-
-        <!-- Sección Sobre mí (visible para todos) -->
-        <li class="nav-separator"><span>Sobre el autor</span></li>
-        <li class="nav-sobre-mi">
-            <div class="nav-sm-avatar">ER</div>
-            <div class="nav-sm-info">
-                <span class="nav-sm-name">Elvis Ramirez Ore</span>
-                <span class="nav-sm-code">s01284d</span>
-                <span class="nav-sm-carrera">Ing. Sistemas y Computación</span>
-                <div class="nav-sm-tags">
-                    <span>Java/JSP</span>
-                    <span>PostgreSQL</span>
-                    <span>Docker</span>
-                    <span>UML/BPMN</span>
-                    <span>Kotlin</span>
-                    <span>Flutter</span>
-                    <span>Linux</span>
-                </div>
-            </div>
+        <li class="nav-item">
+            <a href="${pageContext.request.contextPath}/sobre-mi" class="nav-link">
+                <i class="fas fa-user-circle"></i><span>Sobre mí</span>
+            </a>
         </li>
 
-        <%-- Opciones solo para ADMIN autenticado --%>
+        <%-- Opciones solo para ADMIN --%>
         <c:if test="${not empty sessionScope.usuario and sessionScope.usuario.admin}">
             <li class="nav-item">
                 <a href="${pageContext.request.contextPath}/perfil" class="nav-link">
-                    <i class="fas fa-user-circle"></i><span>Mi Perfil</span>
+                    <i class="fas fa-cog"></i><span>Mi Perfil</span>
                 </a>
             </li>
             <li class="nav-separator"><span>Administración</span></li>
@@ -97,13 +81,11 @@
     <div class="sidebar-footer">
         <c:choose>
             <c:when test="${not empty sessionScope.usuario and sessionScope.usuario.admin}">
-                <%-- Admin: mostrar cerrar sesión --%>
                 <a href="${pageContext.request.contextPath}/logout" class="nav-link nav-logout">
                     <i class="fas fa-sign-out-alt"></i><span>Cerrar Sesión</span>
                 </a>
             </c:when>
             <c:otherwise>
-                <%-- Visitante: mostrar botón "Iniciar sesión como admin" --%>
                 <a href="${pageContext.request.contextPath}/login" class="btn-admin-login">
                     <i class="fas fa-shield-alt"></i>
                     <span>Iniciar sesión como admin</span>
@@ -116,100 +98,14 @@
 
 <style>
 .btn-admin-login {
-    display: flex;
-    align-items: center;
-    gap: .65rem;
-    padding: .7rem 1rem;
-    margin: .25rem .5rem;
+    display: flex; align-items: center; gap: .65rem;
+    padding: .7rem 1rem; margin: .25rem .5rem;
     background: rgba(27,126,194,.15);
     border: 1px solid rgba(27,126,194,.3);
-    border-radius: .6rem;
-    color: #38BDF8;
-    text-decoration: none;
-    font-size: .85rem;
-    font-weight: 600;
+    border-radius: .6rem; color: #38BDF8;
+    text-decoration: none; font-size: .85rem; font-weight: 600;
     transition: .25s ease;
 }
-.btn-admin-login:hover {
-    background: rgba(27,126,194,.3);
-    color: #fff;
-    transform: translateX(3px);
-}
+.btn-admin-login:hover { background: rgba(27,126,194,.3); color: #fff; transform: translateX(3px); }
 .btn-admin-login i { font-size: .9rem; }
-
-/* ── Sobre mí en sidebar ── */
-.nav-sobre-mi {
-    margin: .25rem .5rem .5rem;
-    background: linear-gradient(135deg, rgba(27,126,194,.1), rgba(27,126,194,.05));
-    border: 1px solid rgba(27,126,194,.2);
-    border-radius: .85rem;
-    padding: 1rem;
-    display: flex;
-    gap: .75rem;
-    align-items: flex-start;
-    list-style: none;
-}
-
-.nav-sm-avatar {
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1B7EC2, #38BDF8);
-    display: flex; align-items: center; justify-content: center;
-    font-size: .85rem; font-weight: 800; color: #fff;
-    flex-shrink: 0;
-    box-shadow: 0 0 0 2px rgba(27,126,194,.3);
-}
-
-.nav-sm-info {
-    display: flex;
-    flex-direction: column;
-    gap: .2rem;
-    min-width: 0;
-}
-
-.nav-sm-name {
-    font-size: .85rem;
-    font-weight: 700;
-    color: #F8FAFC;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.nav-sm-code {
-    display: inline-block;
-    font-size: .68rem;
-    font-weight: 700;
-    color: #38BDF8;
-    background: rgba(27,126,194,.2);
-    border: 1px solid rgba(27,126,194,.35);
-    padding: .1rem .5rem;
-    border-radius: 1rem;
-    letter-spacing: .04em;
-    width: fit-content;
-}
-
-.nav-sm-carrera {
-    font-size: .72rem;
-    color: #64748B;
-    line-height: 1.3;
-}
-
-.nav-sm-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .25rem;
-    margin-top: .3rem;
-}
-
-.nav-sm-tags span {
-    font-size: .65rem;
-    font-weight: 600;
-    padding: .15rem .45rem;
-    border-radius: 1rem;
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.1);
-    color: #94A3B8;
-    white-space: nowrap;
-}
 </style>
