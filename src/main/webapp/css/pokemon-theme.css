@@ -211,11 +211,13 @@
   transform-style: preserve-3d;
   transition: transform .6s cubic-bezier(.4,0,.2,1);
   border-radius: 50%;
+  filter: drop-shadow(0 8px 24px rgba(238,21,21,.5));
 }
 
 /* Flip activo por clase JS */
 .pokeball-wrapper.flipped .pokeball-inner {
   transform: rotateY(180deg);
+  filter: drop-shadow(0 10px 28px rgba(255,222,0,.65));
 }
 
 /* ── FRENTE — Pokébola ────────────────────────────────────────── */
@@ -225,6 +227,8 @@
   border-radius: 50%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  clip-path: circle(50% at 50% 50%);
+  -webkit-clip-path: circle(50% at 50% 50%);
 }
 
 .pokeball-front {

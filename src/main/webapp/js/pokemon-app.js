@@ -60,11 +60,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Click sobre el wrapper → toggle flip
         wrapper.addEventListener('click', function(e) {
-            // Si se hizo clic en un botón de admin o en el btn "ENTRAR", no flipar
-            if (e.target.closest && (
-                e.target.closest('.pokeball-admin-actions') ||
-                e.target.closest('.pb-btn')
-            )) return;
+            // Si se hizo clic en el botón "ENTRAR" → dejar que navegue
+            var pbBtn = e.target.closest('.pb-btn');
+            if (pbBtn) {
+                PokemonSound.playClick();
+                // Navegar manualmente usando el href del enlace
+                window.location.href = pbBtn.getAttribute('href');
+                return;
+            }
+
+            // Si se hizo clic en botones de admin → no flipar
+            if (e.target.closest('.pokeball-admin-actions')) return;
 
             var isFlipped = wrapper.classList.contains('flipped');
 
@@ -81,15 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 PokemonSound.playOpen();
             }
         });
-
-        // Botón "ENTRAR" — solo sonido, la navegación sigue normal
-        var btn = wrapper.querySelector('.pb-btn');
-        if (btn) {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                PokemonSound.playClick();
-            });
-        }
 
         // Botones admin — no propaguen el flip
         var adminBtns = wrapper.querySelectorAll('.pokeball-admin-actions button');
